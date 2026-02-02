@@ -90,7 +90,7 @@ function App() {
                     message: offer
                 })
             },
-            UID
+            memberId
         )
     }, [createPeerConnection])
     const createAnswer = useCallback(async (memberId: string, offer: RTCSessionDescriptionInit) => {
@@ -105,7 +105,7 @@ function App() {
                     message: offer
                 })
             },
-            UID
+            memberId
         )
     }, [createPeerConnection])
     const addAnswer = useCallback(async (answer: RTCSessionDescriptionInit) => {
@@ -178,7 +178,7 @@ function App() {
             }
             cleanup()
         }
-    }, []) // Empty dependency array - runs only once on mount
+    }, [addAnswer, createAnswer, createOffer]) // Empty dependency array - runs only once on mount
 
 
     return (
