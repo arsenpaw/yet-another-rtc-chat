@@ -21,7 +21,7 @@ export type SignalingMessage = OfferMessage | AnswerMessage | IceCandidateMessag
 
 export interface SignalingClientConfig {
     appId: string;
-    userId: string;
+    uid: string;
     token?: string;
     channelName?: string;
 }
@@ -93,7 +93,7 @@ export class AgoraSignalingClient extends BaseSignalingClient {
             this.rtmClient = AgoraRTM.createInstance(this.config.appId);
             await this.rtmClient.login({
                 token: this.config.token,
-                uid: this.config.userId
+                uid: this.config.uid
             });
             this.isConnected = true;
             this.emit('connected');
@@ -132,7 +132,6 @@ export class AgoraSignalingClient extends BaseSignalingClient {
             this.channel = this.rtmClient.createChannel(channelName);
             await this.channel.join();
 
-            // Setup channel event listeners
             this.channel.on('MemberJoined', (memberId: string) => {
                 this.emit('member-joined', memberId);
             });

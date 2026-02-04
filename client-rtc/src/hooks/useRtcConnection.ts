@@ -9,7 +9,7 @@ const SERVERS = {
     ]
 }
 
-const UseRtcConnection = ({appId, userId, token}: { appId: string, userId: string, token?: string }) => {
+const UseRtcConnection = ({appId, uid, channel, token}: { appId: string, uid: string, channel: string, token?: string }) => {
     const [localStream, setLocalStream] = useState<MediaStream | null>(null)
     const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null)
     const localStreamRef = useRef<MediaStream | null>(null)
@@ -111,31 +111,25 @@ const UseRtcConnection = ({appId, userId, token}: { appId: string, userId: strin
 
         const initializeApp = async () => {
             try {
-                // Initialize local camera stream
                 const stream = await navigator.mediaDevices.getUserMedia({
                     video: true,
                     audio: true
                 })
                 localStreamRef.current = stream
                 setLocalStream(stream)
-
-                // Initialize signaling client
                 if (!signalingRef.current) {
                     signalingRef.current = createSignalingClient({
                         appId,
-                        userId,
+                        uid: uid,
                         token,
-                        channelName: 'main-channel'
+                        channelName: channel
                     })
                 }
 
-                // Connect to signaling server
                 await signalingRef.current.connect()
 
-                // Join channel
-                await signalingRef.current.joinChannel('main-channel')
+                await signalingRef.current.joinChannel(channel)
 
-                // Setup event listeners
                 signalingRef.current.on('member-joined', async (memberId: string) => {
                     console.log('Member joined:', memberId)
                     remoteMemberIdRef.current = memberId
@@ -190,7 +184,7 @@ const UseRtcConnection = ({appId, userId, token}: { appId: string, userId: strin
             }
             cleanup()
         }
-    }, [addAnswer, appId, createAnswer, createOffer, token, userId])
+    }, [addAnswer, appId, createAnswer, createOffer, token, uid])
 
     return ({
         remoteStream: remoteStream,
