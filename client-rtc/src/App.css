@@ -139,9 +139,33 @@
   color: white;
 }
 
+.connect-btn.call-inactive {
+  background: linear-gradient(45deg, #10b981, #059669);
+  color: white;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.connect-btn.call-active {
+  background: linear-gradient(45deg, #ef4444, #dc2626);
+  color: white;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.5);
+  animation: pulse-call 1.5s ease-in-out infinite;
+}
+
 .connect-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+
+@keyframes pulse-call {
+  0%, 100% {
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.5);
+  }
+  50% {
+    box-shadow: 0 4px 25px rgba(239, 68, 68, 0.8);
+  }
 }
 
 .theme-selector {

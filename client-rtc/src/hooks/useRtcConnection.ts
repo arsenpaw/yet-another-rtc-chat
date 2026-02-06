@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useRef, useState} from 'react';
+import {useCallback, useRef, useState} from 'react';
 import {createSignalingClient, type BaseSignalingClient, type SignalingMessage} from '../lib/signaling';
 
 const SERVERS = {
@@ -9,31 +9,40 @@ const SERVERS = {
     ]
 }
 
-const UseRtcConnection = ({appId, uid, channel, token}: { appId: string, uid: string, channel: string, token?: string }) => {
-    const [localStream, setLocalStream] = useState<MediaStream | null>(null)
+const UseRtcConnection = ({appId, uid, channel, token, localStream}: {
+    appId: string,
+    uid: string,
+    channel: string,
+    token?: string,
+    localStream: MediaStream
+}) => {
     const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null)
-    const localStreamRef = useRef<MediaStream | null>(null)
     const signalingRef = useRef<BaseSignalingClient | null>(null)
     const peerConnectionRef = useRef<RTCPeerConnection | null>(null)
-    const isMountedRef = useRef(false)
-    const offerCreatedRef = useRef(false)
     const remoteMemberIdRef = useRef<string | null>(null)
 
     const createPeerConnection = useCallback((memberId: string) => {
         if (!peerConnectionRef.current) {
             peerConnectionRef.current = new RTCPeerConnection(SERVERS)
-            localStreamRef.current?.getTracks().forEach(track => {
-                peerConnectionRef.current?.addTrack(track, localStreamRef.current!)
+
+            if (!localStream) {
+                console.error('ERROR: localStream is null when creating peer connection')
+                return
+            }
+
+            localStream.getTracks().forEach((track) => {
+                peerConnectionRef.current?.addTrack(track, localStream!)
             })
             peerConnectionRef.current.ontrack = (event) => {
                 const [stream] = event.streams
-                if (stream && !remoteStream) {
+                if (stream) {
                     setRemoteStream(stream)
+                } else {
+                    console.warn('WARNING: stream is null in ontrack event')
                 }
             }
             peerConnectionRef.current.onicecandidate = (event) => {
                 if (event.candidate) {
-                    console.log("Sending ICE candidate:", event.candidate)
                     signalingRef.current?.sendMessageToPeer(
                         {
                             type: 'ice-candidate',
@@ -43,30 +52,32 @@ const UseRtcConnection = ({appId, uid, channel, token}: { appId: string, uid: st
                     ).catch(err => console.error('Failed to send ICE candidate:', err))
                 }
             }
-            peerConnectionRef.current.onconnectionstatechange = () => {
-                console.log('Connection state:', peerConnectionRef.current?.connectionState)
-            }
-
-            peerConnectionRef.current.oniceconnectionstatechange = () => {
-                console.log('ICE connection state:', peerConnectionRef.current?.iceConnectionState)
-            }
         }
 
-    }, [remoteStream])
+    }, [localStream])
     const createOffer = useCallback(async (memberId: string) => {
         try {
             createPeerConnection(memberId)
-            if (!localStreamRef.current || offerCreatedRef.current) return
-            offerCreatedRef.current = true
 
-            const offer = await peerConnectionRef.current?.createOffer()
-            if (!offer) {
-                console.error('Failed to create offer')
-                offerCreatedRef.current = false
+            if (!peerConnectionRef.current) {
+                console.error('ERROR: peerConnectionRef.current is null after createPeerConnection')
                 return
             }
-            await peerConnectionRef.current?.setLocalDescription(offer)
-            await signalingRef.current?.sendMessageToPeer(
+
+            const offer = await peerConnectionRef.current.createOffer()
+            if (!offer) {
+                console.error('Failed to create offer: offer is null')
+                return
+            }
+
+            await peerConnectionRef.current.setLocalDescription(offer)
+
+            if (!signalingRef.current) {
+                console.error('ERROR: signalingRef.current is null when trying to send offer')
+                return
+            }
+
+            await signalingRef.current.sendMessageToPeer(
                 {
                     type: 'offer',
                     message: offer
@@ -75,20 +86,38 @@ const UseRtcConnection = ({appId, uid, channel, token}: { appId: string, uid: st
             )
         } catch (error) {
             console.error('Error creating offer:', error)
-            offerCreatedRef.current = false
         }
     }, [createPeerConnection])
     const createAnswer = useCallback(async (memberId: string, offer: RTCSessionDescriptionInit) => {
         try {
             createPeerConnection(memberId)
-            await peerConnectionRef.current?.setRemoteDescription(offer)
-            const answer = await peerConnectionRef.current?.createAnswer()
-            if (!answer) {
-                console.error('Failed to create answer')
+
+            if (!peerConnectionRef.current) {
+                console.error('ERROR: peerConnectionRef.current is null after createPeerConnection')
                 return
             }
-            await peerConnectionRef.current?.setLocalDescription(answer)
-            await signalingRef.current?.sendMessageToPeer(
+
+            // Check if remote description is already set
+            if (peerConnectionRef.current.currentRemoteDescription) {
+                // Remote description already set, skipping setRemoteDescription in createAnswer
+            } else {
+                await peerConnectionRef.current.setRemoteDescription(new RTCSessionDescription(offer))
+            }
+
+            const answer = await peerConnectionRef.current.createAnswer()
+            if (!answer) {
+                console.error('Failed to create answer: answer is null')
+                return
+            }
+
+            await peerConnectionRef.current.setLocalDescription(answer)
+
+            if (!signalingRef.current) {
+                console.error('ERROR: signalingRef.current is null when trying to send answer')
+                return
+            }
+
+            await signalingRef.current.sendMessageToPeer(
                 {
                     type: 'answer',
                     message: answer
@@ -100,95 +129,110 @@ const UseRtcConnection = ({appId, uid, channel, token}: { appId: string, uid: st
         }
     }, [createPeerConnection])
     const addAnswer = useCallback(async (answer: RTCSessionDescriptionInit) => {
-        if (!peerConnectionRef.current?.currentRemoteDescription) {
-            await peerConnectionRef.current?.setRemoteDescription(answer)
+        try {
+            if (!peerConnectionRef.current) {
+                console.error('ERROR: peerConnectionRef.current is null in addAnswer')
+                return
+            }
+
+            const currentRemoteDesc = peerConnectionRef.current.currentRemoteDescription
+
+            // Only set remote description if not already set
+            if (currentRemoteDesc) {
+                // Remote description already set - skipping to avoid overwriting
+                return
+            }
+
+            await peerConnectionRef.current.setRemoteDescription(new RTCSessionDescription(answer))
+        } catch (error) {
+            console.error('Error adding answer:', error)
         }
     }, [])
 
-    useEffect(() => {
-        if (isMountedRef.current) return
-        isMountedRef.current = true
 
-        const initializeApp = async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: true,
-                    audio: true
-                })
-                localStreamRef.current = stream
-                setLocalStream(stream)
-                if (!signalingRef.current) {
-                    signalingRef.current = createSignalingClient({
-                        appId,
-                        uid: uid,
-                        token,
-                        channelName: channel
-                    })
+    const startCall = useCallback(async () => {
+        try {
+            remoteMemberIdRef.current = null
+            setRemoteStream(null)
+
+            if (peerConnectionRef.current && peerConnectionRef.current.connectionState !== 'closed') {
+                peerConnectionRef.current.close()
+            }
+            peerConnectionRef.current = null
+
+            signalingRef.current = createSignalingClient({
+                appId,
+                uid: uid,
+                token,
+                channelName: channel
+            })
+
+            if (!signalingRef.current) {
+                console.error('ERROR: Failed to create signaling client')
+                return
+            }
+
+            await signalingRef.current.connect()
+
+            await signalingRef.current.joinChannel(channel)
+            signalingRef.current.on('member-joined', async (memberId: string) => {
+                remoteMemberIdRef.current = memberId
+                await createOffer(memberId)
+            })
+
+            signalingRef.current.on('member-left', (memberId: string) => {
+                if (remoteMemberIdRef.current === memberId) {
+                    remoteMemberIdRef.current = null
+                    setRemoteStream(null)
                 }
+            })
 
-                await signalingRef.current.connect()
-
-                await signalingRef.current.joinChannel(channel)
-
-                signalingRef.current.on('member-joined', async (memberId: string) => {
-                    console.log('Member joined:', memberId)
-                    remoteMemberIdRef.current = memberId
-                    if (!offerCreatedRef.current) {
-                        await createOffer(memberId)
-                    }
-                })
-
-                signalingRef.current.on('member-left', (memberId: string) => {
-                    console.log('Member left:', memberId)
-                    if (remoteMemberIdRef.current === memberId) {
-                        remoteMemberIdRef.current = null
-                        setRemoteStream(null)
-                    }
-                })
-
-                signalingRef.current.on('message-from-peer', async (message: SignalingMessage, memberId: string) => {
-                    console.log('Message from peer:', message, memberId)
-
-                    if (message.type === 'offer') {
-                        await createAnswer(memberId, message.message)
-                    }
-
-                    if (message.type === 'answer') {
-                        await addAnswer(message.message)
-                    }
-
-                    if (message.type === 'ice-candidate') {
-                        if (peerConnectionRef.current) {
+            signalingRef.current.on('message-from-peer', async (message: SignalingMessage, memberId: string) => {
+                if (message.type === 'offer') {
+                    await createAnswer(memberId, message.message)
+                } else if (message.type === 'answer') {
+                    await addAnswer(message.message)
+                } else if (message.type === 'ice-candidate') {
+                    if (peerConnectionRef.current) {
+                        try {
                             await peerConnectionRef.current.addIceCandidate(message.message)
+                        } catch (error) {
+                            console.error('Failed to add ICE candidate:', error)
                         }
+                    } else {
+                        console.error('ERROR: peerConnectionRef.current is null when receiving ICE candidate')
                     }
-                })
-
-            } catch (error) {
-                console.error('App initialization failed:', error)
-            }
-        }
-
-        initializeApp()
-
-        return () => {
-            const cleanup = async () => {
-                try {
-                    localStreamRef.current?.getTracks().forEach(track => track.stop())
-                    if (signalingRef.current) {
-                        await signalingRef.current.disconnect()
-                    }
-                } catch (error) {
-                    console.error('Cleanup failed:', error)
                 }
-            }
-            cleanup()
+            })
+
+        } catch (error) {
+            console.error('Failed to start call:', error)
         }
-    }, [addAnswer, appId, createAnswer, createOffer, token, uid])
+    }, [addAnswer, appId, channel, createAnswer, createOffer, token, uid])
+
+    const endCall = useCallback(async () => {
+        try {
+            if (signalingRef.current) {
+                await signalingRef.current.disconnect()
+            } else {
+                console.warn('WARNING: signalingRef.current is null in endCall')
+            }
+
+            if (peerConnectionRef.current) {
+                peerConnectionRef.current.close()
+            } else {
+                console.warn('WARNING: peerConnectionRef.current is null in endCall')
+            }
+
+        } catch (error) {
+            console.error('Cleanup failed:', error)
+        }
+    }, [])
 
     return ({
-        remoteStream: remoteStream,
-        localStream: localStream
+        startCall,
+        endCall,
+        remoteStream: remoteStream
     })
 
 };

@@ -37,7 +37,6 @@ export interface SignalingClientEventMap {
 export abstract class BaseSignalingClient {
     protected config: SignalingClientConfig;
     protected eventListeners: Map<keyof SignalingClientEventMap, Set<Function>> = new Map();
-
     constructor(config: SignalingClientConfig) {
         this.config = config;
     }
@@ -112,6 +111,7 @@ export class AgoraSignalingClient extends BaseSignalingClient {
         try {
             if (this.channel) {
                 await this.leaveChannel();
+                this.channel = null;
             }
             await this.rtmClient?.logout();
             this.isConnected = false;
@@ -163,7 +163,6 @@ export class AgoraSignalingClient extends BaseSignalingClient {
 
         try {
             await this.channel.leave();
-            this.channel = null;
         } catch (error) {
             console.error('Failed to leave channel:', error);
             throw error;
