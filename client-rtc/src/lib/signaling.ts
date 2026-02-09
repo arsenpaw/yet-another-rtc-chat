@@ -20,9 +20,7 @@ export interface IceCandidateMessage {
 export type SignalingMessage = OfferMessage | AnswerMessage | IceCandidateMessage;
 
 export interface SignalingClientConfig {
-    appId: string;
     uid: string;
-    token?: string;
     channelName?: string;
 }
 
@@ -36,7 +34,7 @@ export interface SignalingClientEventMap {
 
 export abstract class BaseSignalingClient {
     protected config: SignalingClientConfig;
-    protected eventListeners: Map<keyof SignalingClientEventMap, Set<Function>> = new Map();
+    protected eventListeners: Map<keyof SignalingClientEventMap, Set<SignalingClientEventMap[keyof SignalingClientEventMap]>> = new Map();
     constructor(config: SignalingClientConfig) {
         this.config = config;
     }
@@ -66,12 +64,12 @@ export abstract class BaseSignalingClient {
 
     protected emit<T extends keyof SignalingClientEventMap>(
         event: T,
-        ...args: any[]
+        ...args: Parameters<SignalingClientEventMap[T]>
     ): void {
         const listeners = this.eventListeners.get(event);
         if (listeners) {
             listeners.forEach(listener => {
-                (listener as any)(...args);
+                (listener as (...args: unknown[]) => void)(...args);
             });
         }
     }
@@ -89,9 +87,14 @@ export class AgoraSignalingClient extends BaseSignalingClient {
         }
 
         try {
-            this.rtmClient = AgoraRTM.createInstance(this.config.appId);
+            const appId = import.meta.env.VITE_APP_ID;
+            const token = import.meta.env.VITE_AGORA_TOKEN;
+            if (!appId) {
+                throw new Error('VITE_APP_ID environment variable is not set');
+            }
+            this.rtmClient = AgoraRTM.createInstance(appId);
             await this.rtmClient.login({
-                token: this.config.token,
+                token: token || undefined,
                 uid: this.config.uid
             });
             this.isConnected = true;

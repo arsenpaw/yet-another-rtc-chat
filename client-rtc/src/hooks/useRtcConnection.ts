@@ -7,11 +7,9 @@ const SERVERS = {
     ]
 };
 
-const UseRtcConnection = ({appId, uid, channel, token, localStream}: {
-    appId: string,
+const UseRtcConnection = ({uid, channel, localStream}: {
     uid: string,
     channel: string,
-    token?: string,
     localStream: MediaStream | null
 }) => {
     const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
@@ -110,7 +108,7 @@ const UseRtcConnection = ({appId, uid, channel, token, localStream}: {
         if (isCallActive.current) return;
         isCallActive.current = true;
 
-        signalingRef.current = createSignalingClient({appId, uid, token, channelName: channel});
+        signalingRef.current = createSignalingClient({uid, channelName: channel});
         await signalingRef.current.connect();
         await signalingRef.current.joinChannel(channel);
 
@@ -146,7 +144,7 @@ const UseRtcConnection = ({appId, uid, channel, token, localStream}: {
             }
         });
 
-    }, [appId, channel, createPeerConnection, handleAnswer, handleIceCandidate, handleOffer, token, uid]);
+    }, [channel, createPeerConnection, handleAnswer, handleIceCandidate, handleOffer, uid]);
 
     const endCall = useCallback(async () => {
         isCallActive.current = false;
