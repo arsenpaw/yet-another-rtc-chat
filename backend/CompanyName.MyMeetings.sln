@@ -17,11 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.BuildingBlocks.Infr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Signaling", "Signaling", "{5F398170-87FD-4368-9930-FAAAD2D9FDCC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Modules.Signaling.Domain", "Modules\Administration\Domain\Backend.Modules.Signaling.Domain.csproj", "{590517F8-686B-460A-97B3-0A09A8BA443C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Modules.Signaling.Domain", "Modules\Signaling\Domain\Backend.Modules.Signaling.Domain.csproj", "{590517F8-686B-460A-97B3-0A09A8BA443C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Modules.Signaling.Application", "Modules\Administration\Application\Backend.Modules.Signaling.Application.csproj", "{6F039231-8745-4171-B5CA-8688E4683CFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Modules.Signaling.Application", "Modules\Signaling\Application\Backend.Modules.Signaling.Application.csproj", "{6F039231-8745-4171-B5CA-8688E4683CFC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Modules.Signaling.Infrastructure", "Modules\Administration\Infrastructure\Backend.Modules.Signaling.Infrastructure.csproj", "{CD765A37-EB16-4E35-AA03-6E706D70E8A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Modules.Signaling.Infrastructure", "Modules\Signaling\Infrastructure\Backend.Modules.Signaling.Infrastructure.csproj", "{CD765A37-EB16-4E35-AA03-6E706D70E8A0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{C733D087-7051-4E35-BCDB-081252A108E5}"
 EndProject

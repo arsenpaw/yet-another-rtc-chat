@@ -1006,14 +1006,6 @@
         "runtime": {
           "Backend.Modules.Signaling.Infrastructure.dll": {}
         }
-      },
-      "Backend.Modules.Signaling.IntegrationEvents/1.0.0": {
-        "dependencies": {
-          "Backend.BuildingBlocks.Infrastructure": "1.0.0"
-        },
-        "runtime": {
-          "Backend.Modules.Signaling.IntegrationEvents.dll": {}
-        }
       }
     }
   },
@@ -1756,11 +1748,6 @@
       "sha512": ""
     },
     "Backend.Modules.Signaling.Infrastructure/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Backend.Modules.Signaling.IntegrationEvents/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
