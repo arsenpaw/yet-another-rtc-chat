@@ -1,0 +1,13 @@
+D:\RTC\yet-another-rtc-messager\backend\BuildingBlocks\Domain\bin\Debug\net8.0\Backend.BuildingBlocks.Domain.deps.json
+D:\RTC\yet-another-rtc-messager\backend\BuildingBlocks\Domain\bin\Debug\net8.0\Backend.BuildingBlocks.Domain.dll
+D:\RTC\yet-another-rtc-messager\backend\BuildingBlocks\Domain\bin\Debug\net8.0\Backend.BuildingBlocks.Domain.pdb
+D:\RTC\yet-another-rtc-messager\backend\BuildingBlocks\Domain\obj\Debug\net8.0\Backend.BuildingBlocks.Domain.csproj.AssemblyReference.cache
+D:\RTC\yet-another-rtc-messager\backend\BuildingBlocks\Domain\obj\Debug\net8.0\Backend.BuildingBlocks.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\RTC\yet-another-rtc-messager\backend\BuildingBlocks\Domain\obj\Debug\net8.0\Backend.BuildingBlocks.Domain.AssemblyInfoInputs.cache
+D:\RTC\yet-another-rtc-messager\backend\BuildingBlocks\Domain\obj\Debug\net8.0\Backend.BuildingBlocks.Domain.AssemblyInfo.cs
+D:\RTC\yet-another-rtc-messager\backend\BuildingBlocks\Domain\obj\Debug\net8.0\Backend.BuildingBlocks.Domain.csproj.CoreCompileInputs.cache
+D:\RTC\yet-another-rtc-messager\backend\BuildingBlocks\Domain\obj\Debug\net8.0\Backend.BuildingBlocks.Domain.sourcelink.json
+D:\RTC\yet-another-rtc-messager\backend\BuildingBlocks\Domain\obj\Debug\net8.0\Backend.BuildingBlocks.Domain.dll
+D:\RTC\yet-another-rtc-messager\backend\BuildingBlocks\Domain\obj\Debug\net8.0\refint\Backend.BuildingBlocks.Domain.dll
+D:\RTC\yet-another-rtc-messager\backend\BuildingBlocks\Domain\obj\Debug\net8.0\Backend.BuildingBlocks.Domain.pdb
+D:\RTC\yet-another-rtc-messager\backend\BuildingBlocks\Domain\obj\Debug\net8.0\ref\Backend.BuildingBlocks.Domain.dll

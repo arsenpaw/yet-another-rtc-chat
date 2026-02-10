@@ -1,0 +1,8 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>CompanyName.MyMeetings.Modules.Administration.Domain</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Domain\Backend.BuildingBlocks.Domain.csproj" />
+  </ItemGroup>
+</Project>
