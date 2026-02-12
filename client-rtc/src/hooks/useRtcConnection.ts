@@ -1,5 +1,9 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {createSignalingClient, type BaseSignalingClient, type SignalingMessage} from '../lib/signaling';
+import {
+    type BaseSignalingClient,
+    type SignalingMessage,
+    createSignalRSignalingClient
+} from '../lib/signaling';
 
 const SERVERS = {
     iceServers: [
@@ -7,9 +11,8 @@ const SERVERS = {
     ]
 };
 
-const UseRtcConnection = ({uid, channel, localStream}: {
+const UseRtcConnection = ({uid, localStream}: {
     uid: string,
-    channel: string,
     localStream: MediaStream | null
 }) => {
     const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
@@ -104,13 +107,12 @@ const UseRtcConnection = ({uid, channel, localStream}: {
         }
     };
 
-    const startCall = useCallback(async () => {
-        if (isCallActive.current) return;
-        isCallActive.current = true;
-
-        signalingRef.current = createSignalingClient({uid, channelName: channel});
+    const setupSignaling = useCallback(async () => {
+        signalingRef.current = createSignalRSignalingClient({
+            hubUrl: "http://localhost:5000/hubs/signaling",
+            uid: uid
+        });
         await signalingRef.current.connect();
-        await signalingRef.current.joinChannel(channel);
 
         signalingRef.current.on('member-joined', async (memberId: string) => {
             try {
@@ -127,7 +129,6 @@ const UseRtcConnection = ({uid, channel, localStream}: {
             } finally {
                 makingOffer.current = false;
             }
-
         });
 
         signalingRef.current.on('message-from-peer', async (msg: SignalingMessage, memberId: string) => {
@@ -143,8 +144,26 @@ const UseRtcConnection = ({uid, channel, localStream}: {
                     break;
             }
         });
+    }, [createPeerConnection, handleAnswer, handleIceCandidate, handleOffer, uid]);
 
-    }, [channel, createPeerConnection, handleAnswer, handleIceCandidate, handleOffer, uid]);
+    const startCall = useCallback(async () => {
+        if (isCallActive.current) return;
+        isCallActive.current = true;
+
+        await setupSignaling();
+        const roomId = await signalingRef.current!.startCall();
+        console.log('Call started, room ID:', roomId);
+        return roomId;
+    }, [setupSignaling]);
+
+    const joinCall = useCallback(async (roomId: string) => {
+        if (isCallActive.current) return;
+        isCallActive.current = true;
+
+        await setupSignaling();
+        await signalingRef.current!.joinCall(roomId);
+        console.log('Joined call, room ID:', roomId);
+    }, [setupSignaling]);
 
     const endCall = useCallback(async () => {
         isCallActive.current = false;
@@ -177,7 +196,7 @@ const UseRtcConnection = ({uid, channel, localStream}: {
         });
     }, [localStream]);
 
-    return {startCall, endCall, remoteStream};
+    return {startCall, joinCall, endCall, remoteStream};
 };
 
 export default UseRtcConnection;

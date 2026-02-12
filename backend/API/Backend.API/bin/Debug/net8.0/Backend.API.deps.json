@@ -66,7 +66,7 @@
           }
         }
       },
-      "MediatR/12.2.0": {
+      "MediatR/12.4.1": {
         "dependencies": {
           "MediatR.Contracts": "2.0.1",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0"
@@ -74,7 +74,7 @@
         "runtime": {
           "lib/net6.0/MediatR.dll": {
             "assemblyVersion": "12.0.0.0",
-            "fileVersion": "12.2.0.0"
+            "fileVersion": "12.4.1.0"
           }
         }
       },
@@ -410,7 +410,7 @@
       "System.Text.Encodings.Web/4.5.0": {},
       "Backend.BuildingBlocks.Domain/1.0.0": {
         "dependencies": {
-          "MediatR": "12.2.0",
+          "MediatR": "12.4.1",
           "Serilog": "4.3.1",
           "Serilog.Sinks.Console": "6.1.1"
         },
@@ -421,6 +421,7 @@
       "Backend.Modules.Signaling.Application/1.0.0": {
         "dependencies": {
           "Backend.Modules.Signaling.Domain": "1.0.0",
+          "MediatR": "12.4.1",
           "Serilog": "4.3.1",
           "Serilog.Sinks.Console": "6.1.1"
         },
@@ -441,6 +442,7 @@
       "Backend.Modules.Signaling.Infrastructure/1.0.0": {
         "dependencies": {
           "Backend.Modules.Signaling.Application": "1.0.0",
+          "Backend.Modules.Signaling.Domain": "1.0.0",
           "Serilog": "4.3.1",
           "Serilog.Sinks.Console": "6.1.1"
         },
@@ -484,12 +486,12 @@
       "path": "identityserver4.accesstokenvalidation/3.0.1",
       "hashPath": "identityserver4.accesstokenvalidation.3.0.1.nupkg.sha512"
     },
-    "MediatR/12.2.0": {
+    "MediatR/12.4.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-8TUFrHapKi6D74PhnSNEguRsH91HNGyP3R4ZQdgDorJgl9Wac5Prh0vA33QfrniAaS6L2xNNhc6vxzg+5AIbwA==",
-      "path": "mediatr/12.2.0",
-      "hashPath": "mediatr.12.2.0.nupkg.sha512"
+      "sha512": "sha512-0tLxCgEC5+r1OCuumR3sWyiVa+BMv3AgiU4+pz8xqTc+2q1WbUEXFOr7Orm96oZ9r9FsldgUtWvB2o7b9jDOaw==",
+      "path": "mediatr/12.4.1",
+      "hashPath": "mediatr.12.4.1.nupkg.sha512"
     },
     "MediatR.Contracts/2.0.1": {
       "type": "package",

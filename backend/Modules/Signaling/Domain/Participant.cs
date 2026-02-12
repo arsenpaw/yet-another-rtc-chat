@@ -4,13 +4,13 @@ using CompanyName.MyMeetings.BuildingBlocks.Domain;
 
 namespace CompanyName.MyMeetings.Modules.Administration.Domain;
 
-public class Participant : Entity<ParticipantId>
+public class Participant : Entity
 {
+    public string Id { get; private set; } = default!;
+
     public RoomId RoomId { get; private set; } = default!;
 
-    public string UserId { get; private set; } = string.Empty;
-
-    public string DisplayName { get; private set; } = string.Empty;
+    public Guid UserId { get; private set; }
 
     public DateTime JoinedAt { get; private set; }
 
@@ -18,40 +18,31 @@ public class Participant : Entity<ParticipantId>
 
     public bool IsConnected { get; private set; }
 
-    public string? ConnectionId { get; private set; }
-
     private Participant()
     {
     }
 
-    public static Participant Create(RoomId roomId, string userId, string displayName)
+    public static Participant Create(RoomId roomId, Guid userId, string connectionId)
     {
         return new Participant
         {
-            Id = ParticipantId.New(),
+            Id = connectionId,
             RoomId = roomId,
             UserId = userId,
-            DisplayName = displayName,
             JoinedAt = DateTime.UtcNow,
             IsConnected = true
         };
     }
 
-    public void Connect(string connectionId)
-    {
-        ConnectionId = connectionId;
-        IsConnected = true;
-    }
-
     public void Disconnect()
     {
-        ConnectionId = null;
         IsConnected = false;
         LeftAt = DateTime.UtcNow;
     }
 
-    public void UpdateDisplayName(string displayName)
+    public void Reconnect()
     {
-        DisplayName = displayName;
+        IsConnected = true;
+        LeftAt = null;
     }
 }

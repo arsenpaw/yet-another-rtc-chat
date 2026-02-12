@@ -10,10 +10,6 @@ public class Room : AuditableEntity<RoomId>, IAggregateRoot
 {
     private readonly List<Participant> _participants = [];
 
-    public string Name { get; private set; } = string.Empty;
-
-    public string? Description { get; private set; }
-
     public int MaxParticipants { get; private set; }
 
     public bool IsActive { get; private set; }
@@ -24,13 +20,11 @@ public class Room : AuditableEntity<RoomId>, IAggregateRoot
     {
     }
 
-    public static Room Create(string name, string? description = null, int maxParticipants = 10)
+    public static Room Create(int maxParticipants = 10)
     {
         var room = new Room
         {
             Id = RoomId.New(),
-            Name = name,
-            Description = description,
             MaxParticipants = maxParticipants,
             IsActive = true
         };
@@ -41,34 +35,32 @@ public class Room : AuditableEntity<RoomId>, IAggregateRoot
         return room;
     }
 
-    public void UpdateDetails(string name, string? description, int maxParticipants)
+    public void UpdateMaxParticipants(int maxParticipants)
     {
-        Name = name;
-        Description = description;
         MaxParticipants = maxParticipants;
         SetModified(DateTime.UtcNow);
     }
 
-    public Participant AddParticipant(string userId, string displayName)
+    public Participant AddParticipant(Guid userId, string connectionId)
     {
         CheckRule(new RoomMustBeActiveRule(IsActive));
         CheckRule(new RoomCannotExceedMaxParticipantsRule(_participants.Count, MaxParticipants));
 
-        var participant = Participant.Create(Id, userId, displayName);
+        var participant = Participant.Create(Id, userId, connectionId);
         _participants.Add(participant);
 
-        AddDomainEvent(new ParticipantJoinedRoomDomainEvent(Id, participant.Id));
+        AddDomainEvent(new ParticipantJoinedRoomDomainEvent(Id, connectionId));
 
         return participant;
     }
 
-    public void RemoveParticipant(ParticipantId participantId)
+    public void RemoveParticipant(string connectionId)
     {
-        var participant = _participants.FirstOrDefault(p => p.Id == participantId);
+        var participant = _participants.FirstOrDefault(p => p.Id == connectionId);
         if (participant != null)
         {
             _participants.Remove(participant);
-            AddDomainEvent(new ParticipantLeftRoomDomainEvent(Id, participantId));
+            AddDomainEvent(new ParticipantLeftRoomDomainEvent(Id, connectionId));
         }
     }
 

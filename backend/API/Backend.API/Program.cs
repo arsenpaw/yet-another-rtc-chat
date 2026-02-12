@@ -1,4 +1,6 @@
-﻿using Serilog;
+﻿using CompanyName.MyMeetings.Modules.Signaling.Infrastructure;
+using CompanyName.MyMeetings.Modules.Signaling.Infrastructure.Hubs;
+using Serilog;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Information)
@@ -18,18 +20,35 @@ try
         .Enrich.FromLogContext()
         .WriteTo.Console());
 
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+        {
+            policy.WithOrigins(builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? ["http://localhost:3000"])
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+        });
+    });
+
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+
+    builder.Services.AddSignalingModule();
 
     var app = builder.Build();
 
     app.UseSwagger();
     app.UseSwaggerUI();
 
+    app.UseCors();
+
     app.UseSerilogRequestLogging();
 
     app.MapControllers();
+
+    app.MapHub<SignalingHub>("/hubs/signaling");
 
     app.Run();
 }

@@ -15,9 +15,9 @@ public class Signal : Entity<SignalId>
 {
     public RoomId RoomId { get; private set; } = default!;
 
-    public ParticipantId FromParticipantId { get; private set; } = default!;
+    public string FromConnectionId { get; private set; } = default!;
 
-    public ParticipantId ToParticipantId { get; private set; } = default!;
+    public string ToConnectionId { get; private set; } = default!;
 
     public SignalType Type { get; private set; }
 
@@ -33,17 +33,17 @@ public class Signal : Entity<SignalId>
     {
     }
 
-    public static Signal CreateOffer(RoomId roomId, ParticipantId from, ParticipantId to, string sdp)
+    public static Signal CreateOffer(RoomId roomId, string from, string to, string sdp)
     {
         return Create(roomId, from, to, SignalType.Offer, sdp);
     }
 
-    public static Signal CreateAnswer(RoomId roomId, ParticipantId from, ParticipantId to, string sdp)
+    public static Signal CreateAnswer(RoomId roomId, string from, string to, string sdp)
     {
         return Create(roomId, from, to, SignalType.Answer, sdp);
     }
 
-    public static Signal CreateIceCandidate(RoomId roomId, ParticipantId from, ParticipantId to, string candidate)
+    public static Signal CreateIceCandidate(RoomId roomId, string from, string to, string candidate)
     {
         return Create(roomId, from, to, SignalType.IceCandidate, candidate);
     }
@@ -54,14 +54,14 @@ public class Signal : Entity<SignalId>
         DeliveredAt = DateTime.UtcNow;
     }
 
-    private static Signal Create(RoomId roomId, ParticipantId from, ParticipantId to, SignalType type, string payload)
+    private static Signal Create(RoomId roomId, string from, string to, SignalType type, string payload)
     {
         return new Signal
         {
             Id = SignalId.New(),
             RoomId = roomId,
-            FromParticipantId = from,
-            ToParticipantId = to,
+            FromConnectionId = from,
+            ToConnectionId = to,
             Type = type,
             Payload = payload,
             CreatedAt = DateTime.UtcNow,

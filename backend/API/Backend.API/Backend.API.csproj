@@ -15,6 +15,9 @@
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Signaling\Infrastructure\Backend.Modules.Signaling.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Modules\" />
   </ItemGroup>
 </Project>

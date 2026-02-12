@@ -8,11 +8,11 @@ public class ParticipantJoinedRoomDomainEvent : DomainEventBase
 {
     public RoomId RoomId { get; }
 
-    public ParticipantId ParticipantId { get; }
+    public string ConnectionId { get; }
 
-    public ParticipantJoinedRoomDomainEvent(RoomId roomId, ParticipantId participantId)
+    public ParticipantJoinedRoomDomainEvent(RoomId roomId, string connectionId)
     {
         RoomId = roomId;
-        ParticipantId = participantId;
+        ConnectionId = connectionId;
     }
 }
