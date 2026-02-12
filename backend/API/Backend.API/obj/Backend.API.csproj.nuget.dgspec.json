@@ -33,8 +33,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj": {
-                "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj"
+              "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj": {
+                "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj"
               }
             }
           }
@@ -72,6 +72,10 @@
               "target": "Package",
               "version": "[1.19.5, )"
             },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[8.0.3, )"
+            },
             "StyleCop.Analyzers": {
               "suppressParent": "All",
               "target": "Package",
@@ -97,108 +101,6 @@
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
             },
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.319/PortableRuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Application\\Backend.BuildingBlocks.Application.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Application\\Backend.BuildingBlocks.Application.csproj",
-        "projectName": "Backend.BuildingBlocks.Application",
-        "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Application\\Backend.BuildingBlocks.Application.csproj",
-        "packagesPath": "C:\\Users\\arsen\\.nuget\\packages\\",
-        "outputPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Application\\obj\\",
-        "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
-        "configFilePaths": [
-          "C:\\Users\\arsen\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "net8.0"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
-            "projectReferences": {
-              "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj": {
-                "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "allWarningsAsErrors": true,
-          "noWarn": [
-            "NU1603",
-            "NU1701",
-            "NU5128"
-          ],
-          "warnAsError": [
-            "NU1605"
-          ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        }
-      },
-      "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
-          "dependencies": {
-            "Dapper": {
-              "target": "Package",
-              "version": "[2.1.24, )"
-            },
-            "FluentValidation": {
-              "target": "Package",
-              "version": "[11.8.1, )"
-            },
-            "Newtonsoft.Json": {
-              "target": "Package",
-              "version": "[13.0.3, )"
-            },
-            "Quartz": {
-              "target": "Package",
-              "version": "[3.8.0, )"
-            },
-            "Serilog.AspNetCore": {
-              "target": "Package",
-              "version": "[8.0.0, )"
-            },
-            "StyleCop.Analyzers": {
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[1.2.0-beta.556, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
@@ -263,6 +165,14 @@
               "target": "Package",
               "version": "[12.2.0, )"
             },
+            "Serilog": {
+              "target": "Package",
+              "version": "[4.3.1, )"
+            },
+            "Serilog.Sinks.Console": {
+              "target": "Package",
+              "version": "[6.1.1, )"
+            },
             "StyleCop.Analyzers": {
               "suppressParent": "All",
               "target": "Package",
@@ -289,124 +199,14 @@
         }
       }
     },
-    "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Infrastructure\\Backend.BuildingBlocks.Infrastructure.csproj": {
+    "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Application\\Backend.Modules.Signaling.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Infrastructure\\Backend.BuildingBlocks.Infrastructure.csproj",
-        "projectName": "Backend.BuildingBlocks.Infrastructure",
-        "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Infrastructure\\Backend.BuildingBlocks.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\arsen\\.nuget\\packages\\",
-        "outputPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Infrastructure\\obj\\",
-        "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
-        "configFilePaths": [
-          "C:\\Users\\arsen\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "net8.0"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
-            "projectReferences": {
-              "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Application\\Backend.BuildingBlocks.Application.csproj": {
-                "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Application\\Backend.BuildingBlocks.Application.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "allWarningsAsErrors": true,
-          "noWarn": [
-            "NU1603",
-            "NU1701",
-            "NU5128"
-          ],
-          "warnAsError": [
-            "NU1605"
-          ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        }
-      },
-      "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
-          "dependencies": {
-            "Autofac": {
-              "target": "Package",
-              "version": "[7.1.0, )"
-            },
-            "Autofac.Extensions.DependencyInjection": {
-              "target": "Package",
-              "version": "[8.0.0, )"
-            },
-            "Microsoft.EntityFrameworkCore": {
-              "target": "Package",
-              "version": "[8.0.0, )"
-            },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
-              "target": "Package",
-              "version": "[8.0.0, )"
-            },
-            "Polly": {
-              "target": "Package",
-              "version": "[8.2.0, )"
-            },
-            "SqlStreamStore.MsSql": {
-              "target": "Package",
-              "version": "[1.1.3, )"
-            },
-            "StyleCop.Analyzers": {
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[1.2.0-beta.556, )"
-            },
-            "System.Data.SqlClient": {
-              "target": "Package",
-              "version": "[4.8.6, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.319/PortableRuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Application\\Backend.Modules.Signaling.Application.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Application\\Backend.Modules.Signaling.Application.csproj",
+        "projectUniqueName": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Application\\Backend.Modules.Signaling.Application.csproj",
         "projectName": "Backend.Modules.Signaling.Application",
-        "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Application\\Backend.Modules.Signaling.Application.csproj",
+        "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Application\\Backend.Modules.Signaling.Application.csproj",
         "packagesPath": "C:\\Users\\arsen\\.nuget\\packages\\",
-        "outputPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Application\\obj\\",
+        "outputPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -428,11 +228,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Domain\\Backend.Modules.Signaling.Domain.csproj": {
-                "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Domain\\Backend.Modules.Signaling.Domain.csproj"
-              },
-              "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\IntegrationEvents\\Backend.Modules.Signaling.IntegrationEvents.csproj": {
-                "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\IntegrationEvents\\Backend.Modules.Signaling.IntegrationEvents.csproj"
+              "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj": {
+                "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj"
               }
             }
           }
@@ -458,6 +255,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Serilog": {
+              "target": "Package",
+              "version": "[4.3.1, )"
+            },
+            "Serilog.Sinks.Console": {
+              "target": "Package",
+              "version": "[6.1.1, )"
+            },
             "StyleCop.Analyzers": {
               "suppressParent": "All",
               "target": "Package",
@@ -484,14 +289,14 @@
         }
       }
     },
-    "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Domain\\Backend.Modules.Signaling.Domain.csproj": {
+    "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Domain\\Backend.Modules.Signaling.Domain.csproj",
+        "projectUniqueName": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj",
         "projectName": "Backend.Modules.Signaling.Domain",
-        "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Domain\\Backend.Modules.Signaling.Domain.csproj",
+        "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj",
         "packagesPath": "C:\\Users\\arsen\\.nuget\\packages\\",
-        "outputPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Domain\\obj\\",
+        "outputPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -543,6 +348,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Serilog": {
+              "target": "Package",
+              "version": "[4.3.1, )"
+            },
+            "Serilog.Sinks.Console": {
+              "target": "Package",
+              "version": "[6.1.1, )"
+            },
             "StyleCop.Analyzers": {
               "suppressParent": "All",
               "target": "Package",
@@ -569,14 +382,14 @@
         }
       }
     },
-    "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj": {
+    "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj",
+        "projectUniqueName": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj",
         "projectName": "Backend.Modules.Signaling.Infrastructure",
-        "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj",
+        "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\arsen\\.nuget\\packages\\",
-        "outputPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Infrastructure\\obj\\",
+        "outputPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -598,8 +411,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Application\\Backend.Modules.Signaling.Application.csproj": {
-                "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\Application\\Backend.Modules.Signaling.Application.csproj"
+              "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Application\\Backend.Modules.Signaling.Application.csproj": {
+                "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Application\\Backend.Modules.Signaling.Application.csproj"
               }
             }
           }
@@ -625,88 +438,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "StyleCop.Analyzers": {
-              "suppressParent": "All",
+            "Serilog": {
               "target": "Package",
-              "version": "[1.2.0-beta.556, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.319/PortableRuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\IntegrationEvents\\Backend.Modules.Signaling.IntegrationEvents.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\IntegrationEvents\\Backend.Modules.Signaling.IntegrationEvents.csproj",
-        "projectName": "Backend.Modules.Signaling.IntegrationEvents",
-        "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\IntegrationEvents\\Backend.Modules.Signaling.IntegrationEvents.csproj",
-        "packagesPath": "C:\\Users\\arsen\\.nuget\\packages\\",
-        "outputPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Administration\\IntegrationEvents\\obj\\",
-        "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
-        "configFilePaths": [
-          "C:\\Users\\arsen\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "net8.0"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
-            "projectReferences": {
-              "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Infrastructure\\Backend.BuildingBlocks.Infrastructure.csproj": {
-                "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Infrastructure\\Backend.BuildingBlocks.Infrastructure.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "allWarningsAsErrors": true,
-          "noWarn": [
-            "NU1603",
-            "NU1701",
-            "NU5128"
-          ],
-          "warnAsError": [
-            "NU1605"
-          ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        }
-      },
-      "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
-          "dependencies": {
+              "version": "[4.3.1, )"
+            },
+            "Serilog.Sinks.Console": {
+              "target": "Package",
+              "version": "[6.1.1, )"
+            },
             "StyleCop.Analyzers": {
               "suppressParent": "All",
               "target": "Package",

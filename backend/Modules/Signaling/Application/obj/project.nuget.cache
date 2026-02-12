@@ -1,12 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "4sXyzFBear4=",
+  "dgSpecHash": "HS5VJ+Rv9x4=",
   "success": true,
   "projectFilePath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Application\\Backend.Modules.Signaling.Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\arsen\\.nuget\\packages\\mediatr\\12.2.0\\mediatr.12.2.0.nupkg.sha512",
     "C:\\Users\\arsen\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
     "C:\\Users\\arsen\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\arsen\\.nuget\\packages\\serilog\\4.3.1\\serilog.4.3.1.nupkg.sha512",
+    "C:\\Users\\arsen\\.nuget\\packages\\serilog.sinks.console\\6.1.1\\serilog.sinks.console.6.1.1.nupkg.sha512",
     "C:\\Users\\arsen\\.nuget\\packages\\stylecop.analyzers\\1.2.0-beta.556\\stylecop.analyzers.1.2.0-beta.556.nupkg.sha512",
     "C:\\Users\\arsen\\.nuget\\packages\\stylecop.analyzers.unstable\\1.2.0.556\\stylecop.analyzers.unstable.1.2.0.556.nupkg.sha512"
   ],

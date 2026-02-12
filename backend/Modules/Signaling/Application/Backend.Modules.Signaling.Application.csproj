@@ -2,4 +2,8 @@
   <PropertyGroup>
     <RootNamespace>CompanyName.MyMeetings.Modules.Administration.Application</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Serilog" Version="4.3.1" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
+  </ItemGroup>
 </Project>
