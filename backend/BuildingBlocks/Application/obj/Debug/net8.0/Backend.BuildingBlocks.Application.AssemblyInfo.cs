@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright © Kamil Grzybek 2026")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+383b1e400830c351ea295146ece885a1ecf22a4d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+14d55488a0c5a9758ffbe6229a497c9d608d1b94")]
 [assembly: System.Reflection.AssemblyProductAttribute("Kamil Grzybek Projects")]
 [assembly: System.Reflection.AssemblyTrademarkAttribute("Kamil Grzybek™")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Backend.BuildingBlocks.Application")]
