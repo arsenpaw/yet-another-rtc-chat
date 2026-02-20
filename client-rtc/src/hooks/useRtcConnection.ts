@@ -4,6 +4,7 @@ import {
     type SignalingMessage,
     createSignalRSignalingClient
 } from '../lib/signaling';
+import {config} from '../lib/config';
 
 const SERVERS = {
     iceServers: [
@@ -109,13 +110,9 @@ const UseRtcConnection = ({uid, localStream}: {
 
     const setupSignaling = useCallback(async () => {
         signalingRef.current = createSignalRSignalingClient({
-            hubUrl: "http://localhost:5000/hubs/signaling",
+            hubUrl: config.signalingHubUrl,
             uid: uid
         });
-        //         signalingRef.current = createSignalingClient({
-        //     channelName: `call-${uid}`,
-        //     uid: uid
-        // });
         await signalingRef.current.connect();
 
         signalingRef.current.on('member-joined', async (memberId: string) => {
