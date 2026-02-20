@@ -1,6 +1,6 @@
 ﻿#nullable enable
 
-using CompanyName.MyMeetings.Modules.Administration.Domain;
+using CompanyName.MyMeetings.Modules.Signaling.Domain;
 
 namespace CompanyName.MyMeetings.Modules.Signaling.Application.Repositories;
 

@@ -43,7 +43,7 @@ try
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    app.UseCors();
+    app.UseCors("DefaultPolicy");
 
     app.UseSerilogRequestLogging();
 

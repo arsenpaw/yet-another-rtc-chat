@@ -198,9 +198,6 @@
             "projectReferences": {
               "D:\\Repos\\yet-another-rtc-chat\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj": {
                 "projectPath": "D:\\Repos\\yet-another-rtc-chat\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj"
-              },
-              "D:\\Repos\\yet-another-rtc-chat\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj": {
-                "projectPath": "D:\\Repos\\yet-another-rtc-chat\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj"
               }
             }
           }
