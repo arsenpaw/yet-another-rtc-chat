@@ -9,7 +9,7 @@ Log.Logger = new LoggerConfiguration()
     .Enrich.FromLogContext()
     .WriteTo.Console()
     .CreateBootstrapLogger();
-
+var corsPolicyName = "DefaultPolicy";
 try
 {
     Log.Information("Starting up");
@@ -28,7 +28,7 @@ try
     builder.Services.AddSwaggerGen();
     builder.Services.AddCors(options =>
     {
-        options.AddPolicy("DefaultPolicy", policy =>
+        options.AddPolicy(corsPolicyName, policy =>
         {
             policy.WithOrigins(applicationSettings.Cors.AllowedOrigins)
                 .AllowAnyMethod()
@@ -43,7 +43,7 @@ try
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    app.UseCors();
+    app.UseCors(corsPolicyName);
 
     app.UseSerilogRequestLogging();
 
