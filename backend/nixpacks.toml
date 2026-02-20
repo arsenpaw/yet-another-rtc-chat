@@ -7,3 +7,6 @@
 
 [phases.build]
     cmds = ["dotnet publish ./API/Backend.API/Backend.API.csproj -c Release -o out"]
+
+[start]
+    cmd = "./out/Backend.API"
