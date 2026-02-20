@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ne22KkN3Exg=",
+  "dgSpecHash": "wfqAmoary+g=",
   "success": true,
-  "projectFilePath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj",
+  "projectFilePath": "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\arsen\\.nuget\\packages\\mediatr\\12.4.1\\mediatr.12.4.1.nupkg.sha512",
     "C:\\Users\\arsen\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",

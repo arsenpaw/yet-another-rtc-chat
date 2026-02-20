@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "21cbs7jOVW4=",
+  "dgSpecHash": "SzIIinQPsgw=",
   "success": true,
-  "projectFilePath": "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Application\\Backend.BuildingBlocks.Application.csproj",
+  "projectFilePath": "D:\\Repos\\yet-another-rtc-chat\\backend\\BuildingBlocks\\Application\\Backend.BuildingBlocks.Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\arsen\\.nuget\\packages\\dapper\\2.1.24\\dapper.2.1.24.nupkg.sha512",
     "C:\\Users\\arsen\\.nuget\\packages\\fluentvalidation\\11.8.1\\fluentvalidation.11.8.1.nupkg.sha512",

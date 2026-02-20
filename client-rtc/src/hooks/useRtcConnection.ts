@@ -2,7 +2,7 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 import {
     type BaseSignalingClient,
     type SignalingMessage,
-    createSignalRSignalingClient, createSignalingClient
+    createSignalRSignalingClient
 } from '../lib/signaling';
 
 const SERVERS = {
@@ -108,14 +108,14 @@ const UseRtcConnection = ({uid, localStream}: {
     };
 
     const setupSignaling = useCallback(async () => {
-        // signalingRef.current = createSignalRSignalingClient({
-        //     hubUrl: "http://localhost:5000/hubs/signaling",
-        //     uid: uid
-        // });
-                signalingRef.current = createSignalingClient({
-            channelName: `call-${uid}`,
+        signalingRef.current = createSignalRSignalingClient({
+            hubUrl: "http://localhost:5000/hubs/signaling",
             uid: uid
         });
+        //         signalingRef.current = createSignalingClient({
+        //     channelName: `call-${uid}`,
+        //     uid: uid
+        // });
         await signalingRef.current.connect();
 
         signalingRef.current.on('member-joined', async (memberId: string) => {

@@ -1,4 +1,6 @@
-﻿using CompanyName.MyMeetings.Modules.Signaling.Infrastructure;
+﻿using CompanyName.MyMeetings.API.Configuration;
+using CompanyName.MyMeetings.API.Configuration.Extensions;
+using CompanyName.MyMeetings.Modules.Signaling.Infrastructure;
 using CompanyName.MyMeetings.Modules.Signaling.Infrastructure.Hubs;
 using Serilog;
 
@@ -20,21 +22,20 @@ try
         .Enrich.FromLogContext()
         .WriteTo.Console());
 
-    builder.Services.AddCors(options =>
-    {
-        options.AddDefaultPolicy(policy =>
-        {
-            policy.WithOrigins(builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? ["http://localhost:3000"])
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
-        });
-    });
-
+    builder.AddApplicationSettings(out var applicationSettings);
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("DefaultPolicy", policy =>
+        {
+            policy.WithOrigins(applicationSettings.Cors.AllowedOrigins)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+        });
+    });
     builder.Services.AddSignalingModule();
 
     var app = builder.Build();

@@ -71,7 +71,10 @@
           "Serilog.Sinks.Console": "6.1.1"
         },
         "runtime": {
-          "Backend.BuildingBlocks.Domain.dll": {}
+          "Backend.BuildingBlocks.Domain.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "Backend.Modules.Signaling.Application/1.0.0": {
@@ -82,7 +85,10 @@
           "Serilog.Sinks.Console": "6.1.1"
         },
         "runtime": {
-          "Backend.Modules.Signaling.Application.dll": {}
+          "Backend.Modules.Signaling.Application.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "Backend.Modules.Signaling.Domain/1.0.0": {
@@ -92,7 +98,10 @@
           "Serilog.Sinks.Console": "6.1.1"
         },
         "runtime": {
-          "Backend.Modules.Signaling.Domain.dll": {}
+          "Backend.Modules.Signaling.Domain.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }

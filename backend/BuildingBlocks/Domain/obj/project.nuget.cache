@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ABmK4zUWyhw=",
+  "dgSpecHash": "ZmE9bf/qtxk=",
   "success": true,
-  "projectFilePath": "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj",
+  "projectFilePath": "D:\\Repos\\yet-another-rtc-chat\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\arsen\\.nuget\\packages\\mediatr\\12.2.0\\mediatr.12.2.0.nupkg.sha512",
     "C:\\Users\\arsen\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",

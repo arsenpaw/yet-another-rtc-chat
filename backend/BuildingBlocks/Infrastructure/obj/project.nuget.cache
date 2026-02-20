@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "VioSaewsuaU=",
+  "dgSpecHash": "+sph+ttbiJg=",
   "success": true,
-  "projectFilePath": "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Infrastructure\\Backend.BuildingBlocks.Infrastructure.csproj",
+  "projectFilePath": "D:\\Repos\\yet-another-rtc-chat\\backend\\BuildingBlocks\\Infrastructure\\Backend.BuildingBlocks.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\arsen\\.nuget\\packages\\autofac\\7.1.0\\autofac.7.1.0.nupkg.sha512",
     "C:\\Users\\arsen\\.nuget\\packages\\autofac.extensions.dependencyinjection\\8.0.0\\autofac.extensions.dependencyinjection.8.0.0.nupkg.sha512",

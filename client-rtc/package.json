@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@microsoft/signalr": "^10.0.0",
+    "@vitejs/plugin-basic-ssl": "^2.1.4",
     "agora-rtm-sdk": "1.5.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

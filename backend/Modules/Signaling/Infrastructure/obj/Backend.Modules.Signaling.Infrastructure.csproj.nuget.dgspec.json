@@ -1,32 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj": {}
+    "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj": {}
   },
   "projects": {
-    "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj": {
+    "D:\\Repos\\yet-another-rtc-chat\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj",
+        "projectUniqueName": "D:\\Repos\\yet-another-rtc-chat\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj",
         "projectName": "Backend.BuildingBlocks.Domain",
-        "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj",
+        "projectPath": "D:\\Repos\\yet-another-rtc-chat\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj",
         "packagesPath": "C:\\Users\\arsen\\.nuget\\packages\\",
-        "outputPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Domain\\obj\\",
+        "outputPath": "D:\\Repos\\yet-another-rtc-chat\\backend\\BuildingBlocks\\Domain\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\arsen\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\arsen\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -90,41 +83,34 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.319/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\arsen\\.dotnet\\sdk\\8.0.418/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Application\\Backend.Modules.Signaling.Application.csproj": {
+    "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Application\\Backend.Modules.Signaling.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Application\\Backend.Modules.Signaling.Application.csproj",
+        "projectUniqueName": "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Application\\Backend.Modules.Signaling.Application.csproj",
         "projectName": "Backend.Modules.Signaling.Application",
-        "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Application\\Backend.Modules.Signaling.Application.csproj",
+        "projectPath": "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Application\\Backend.Modules.Signaling.Application.csproj",
         "packagesPath": "C:\\Users\\arsen\\.nuget\\packages\\",
-        "outputPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Application\\obj\\",
+        "outputPath": "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Application\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\arsen\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\arsen\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj": {
-                "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj"
+              "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj": {
+                "projectPath": "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj"
               }
             }
           }
@@ -184,44 +170,37 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.319/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\arsen\\.dotnet\\sdk\\8.0.418/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj": {
+    "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj",
+        "projectUniqueName": "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj",
         "projectName": "Backend.Modules.Signaling.Domain",
-        "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj",
+        "projectPath": "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj",
         "packagesPath": "C:\\Users\\arsen\\.nuget\\packages\\",
-        "outputPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Domain\\obj\\",
+        "outputPath": "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Domain\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\arsen\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\arsen\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj": {
-                "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj"
+              "D:\\Repos\\yet-another-rtc-chat\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj": {
+                "projectPath": "D:\\Repos\\yet-another-rtc-chat\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj"
               },
-              "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj": {
-                "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj"
+              "D:\\Repos\\yet-another-rtc-chat\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj": {
+                "projectPath": "D:\\Repos\\yet-another-rtc-chat\\backend\\BuildingBlocks\\Domain\\Backend.BuildingBlocks.Domain.csproj"
               }
             }
           }
@@ -277,44 +256,37 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.319/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\arsen\\.dotnet\\sdk\\8.0.418/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj": {
+    "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj",
+        "projectUniqueName": "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj",
         "projectName": "Backend.Modules.Signaling.Infrastructure",
-        "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj",
+        "projectPath": "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Infrastructure\\Backend.Modules.Signaling.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\arsen\\.nuget\\packages\\",
-        "outputPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Infrastructure\\obj\\",
+        "outputPath": "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\arsen\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\arsen\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Application\\Backend.Modules.Signaling.Application.csproj": {
-                "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Application\\Backend.Modules.Signaling.Application.csproj"
+              "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Application\\Backend.Modules.Signaling.Application.csproj": {
+                "projectPath": "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Application\\Backend.Modules.Signaling.Application.csproj"
               },
-              "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj": {
-                "projectPath": "D:\\RTC\\yet-another-rtc-messager\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj"
+              "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj": {
+                "projectPath": "D:\\Repos\\yet-another-rtc-chat\\backend\\Modules\\Signaling\\Domain\\Backend.Modules.Signaling.Domain.csproj"
               }
             }
           }
@@ -373,7 +345,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.319/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\arsen\\.dotnet\\sdk\\8.0.418/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

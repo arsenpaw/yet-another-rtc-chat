@@ -47,7 +47,6 @@ function App() {
 
     const {remoteStream, startCall, joinCall, endCall} = useRtcConnection({
         uid: userId,
-        channel: roomId!,
         localStream: localStream,
     });
     const handleStartCall = async () => {
