@@ -1,0 +1,9 @@
+[phases.setup]
+    nixpkgsArchive = '8fff54379ca15c3f4fa2a8fc62acc1b0b0a15c31'
+    pkgs = ['dotnet-sdk_8'] 
+
+[phases.install]
+    cmds = ["dotnet restore ./API/Backend.API/Backend.API.csproj"]
+
+[phases.build]
+    cmds = ["dotnet publish ./API/Backend.API/Backend.API.csproj -c Release -o out"]
