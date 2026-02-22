@@ -10,7 +10,7 @@ public class Room : AuditableEntity<RoomId>, IAggregateRoot
 {
     private readonly List<Participant> _participants = [];
 
-    public int MaxParticipants { get; private set; }
+    public int MaxParticipants { get; private set; } = 2;
 
     public bool IsActive { get; private set; }
 
@@ -20,12 +20,11 @@ public class Room : AuditableEntity<RoomId>, IAggregateRoot
     {
     }
 
-    public static Room Create(int maxParticipants = 10)
+    public static Room Create()
     {
         var room = new Room
         {
             Id = RoomId.New(),
-            MaxParticipants = maxParticipants,
             IsActive = true
         };
 
@@ -33,12 +32,6 @@ public class Room : AuditableEntity<RoomId>, IAggregateRoot
         room.AddDomainEvent(new RoomCreatedDomainEvent(room.Id));
 
         return room;
-    }
-
-    public void UpdateMaxParticipants(int maxParticipants)
-    {
-        MaxParticipants = maxParticipants;
-        SetModified(DateTime.UtcNow);
     }
 
     public Participant AddParticipant(Guid userId, string connectionId)

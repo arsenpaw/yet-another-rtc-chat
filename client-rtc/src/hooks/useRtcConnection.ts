@@ -12,9 +12,10 @@ const SERVERS = {
     ]
 };
 
-const UseRtcConnection = ({uid, localStream}: {
+const UseRtcConnection = ({uid, localStream, onError}: {
     uid: string,
-    localStream: MediaStream | null
+    localStream: MediaStream | null,
+    onError?: (error: unknown) => void
 }) => {
     const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
     const signalingRef = useRef<BaseSignalingClient | null>(null);
@@ -113,7 +114,12 @@ const UseRtcConnection = ({uid, localStream}: {
             hubUrl: config.signalingHubUrl,
             uid: uid
         });
+
         await signalingRef.current.connect();
+
+        signalingRef.current.on('error', (error: unknown) => {
+            onError?.(error);
+        });
 
         signalingRef.current.on('member-joined', async (memberId: string) => {
             try {
@@ -121,12 +127,12 @@ const UseRtcConnection = ({uid, localStream}: {
                 const pc = createPeerConnection(memberId);
                 const offer = await pc.createOffer();
                 await pc.setLocalDescription(offer);
-                signalingRef.current?.sendMessageToPeer(
+                await signalingRef.current?.sendMessageToPeer(
                     {type: 'offer', message: offer},
-                    memberId
+                    memberId,
                 );
             } catch (err) {
-                console.error(err);
+                console.error('Failed to send offer:', err);
             } finally {
                 makingOffer.current = false;
             }
@@ -145,7 +151,7 @@ const UseRtcConnection = ({uid, localStream}: {
                     break;
             }
         });
-    }, [createPeerConnection, handleAnswer, handleIceCandidate, handleOffer, uid]);
+    }, [createPeerConnection, handleAnswer, handleIceCandidate, handleOffer, uid, onError]);
 
     const startCall = useCallback(async () => {
         if (isCallActive.current) return;
@@ -153,7 +159,6 @@ const UseRtcConnection = ({uid, localStream}: {
 
         await setupSignaling();
         const roomId = await signalingRef.current!.startCall();
-        console.log('Call started, room ID:', roomId);
         return roomId;
     }, [setupSignaling]);
 
@@ -163,18 +168,16 @@ const UseRtcConnection = ({uid, localStream}: {
 
         await setupSignaling();
         await signalingRef.current!.joinCall(roomId);
-        console.log('Joined call, room ID:', roomId);
     }, [setupSignaling]);
 
     const endCall = useCallback(async () => {
         isCallActive.current = false;
-        signalingRef.current?.disconnect();
+        await signalingRef.current?.disconnect();
         peerConnectionRef.current?.close();
         peerConnectionRef.current = null;
         setRemoteStream(null);
         iceCandidateQueue.current = [];
     }, []);
-
 
     useEffect(() => {
         return () => {

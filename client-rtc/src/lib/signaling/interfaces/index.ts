@@ -1,5 +1,6 @@
 export type SignalingMessageType = 'offer' | 'answer' | 'ice-candidate';
 
+
 export interface OfferMessage {
     type: 'offer';
     message: RTCSessionDescriptionInit;
@@ -30,6 +31,7 @@ export interface SignalingClientEventMap {
     'disconnected': () => void;
     'connection-state-changed': (newState: string, reason: string) => void;
     'peers-online-status-changed': (status: Record<string, string>) => void;
+    'error': (error: unknown) => void;
 }
 
 export interface RoomInfoDto {
@@ -50,7 +52,6 @@ export interface SignalRSignalingClientConfig extends SignalingClientConfig {
 }
 
 export interface SignalRSignalingClientEventMap extends SignalingClientEventMap {
-    'error': (message: string) => void;
     'joined-room': (roomInfo: RoomInfoDto) => void;
     'participants-list': (participants: ParticipantDto[]) => void;
     'participant-joined': (participant: ParticipantDto) => void;

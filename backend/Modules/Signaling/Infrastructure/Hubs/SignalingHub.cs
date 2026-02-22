@@ -189,9 +189,9 @@ public class SignalingHub : Hub<ISignalingHubClient>
             room.Id.Value);
     }
 
-    public async Task<Guid> CreateRoom(int maxParticipants = 10)
+    public async Task<Guid> CreateRoom()
     {
-        var room = Room.Create(maxParticipants);
+        var room = Room.Create();
         await _roomRepository.AddAsync(room);
 
         _logger.Information("Room {RoomId} created", room.Id.Value);
