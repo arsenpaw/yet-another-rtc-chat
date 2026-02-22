@@ -3,6 +3,7 @@ import "./App.css";
 import useRtcConnection from "./hooks/useRtcConnection.ts";
 import { useSearchParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
+import { toast } from "react-toastify";
 
 const UID = String(Math.floor(Math.random() * 10000));
 
@@ -21,19 +22,15 @@ function App() {
     let isMounted = true;
 
     const initializeStream = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: true,
-        });
-        if (isMounted) {
-          streamRef.current = stream;
-          setLocalStream(stream);
-        } else {
-          stream.getTracks().forEach((track) => track.stop());
-        }
-      } catch (error) {
-        console.error("Failed to get user media:", error);
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+      if (isMounted) {
+        streamRef.current = stream;
+        setLocalStream(stream);
+      } else {
+        stream.getTracks().forEach((track) => track.stop());
       }
     };
 
@@ -49,12 +46,13 @@ function App() {
   const { remoteStream, startCall, joinCall, endCall } = useRtcConnection({
     uid: userId,
     localStream: localStream,
+    onError: (error) => toast.error(`Signaling error: ${error}`),
   });
   const handleStartCall = async () => {
-    if (localStream) {
+    if (!localStream) return;
+    try {
       if (roomId) {
         await joinCall(roomId);
-        console.log("Joined existing call");
       } else {
         const newRoomId = await startCall();
         if (newRoomId) {
@@ -62,21 +60,23 @@ function App() {
           setInvitationLink(link);
         }
       }
-
       setIsCallActive(true);
-      console.log("Call started");
+    } catch (error) {
+      toast.error(`Call failed: ${error}`);
     }
   };
 
   const handleEndCall = async () => {
-    await endCall();
-    setIsCallActive(false);
-    setInvitationLink(null);
-    console.log("Call ended");
+    try {
+      await endCall();
+      setIsCallActive(false);
+      setInvitationLink(null);
+    } catch (error) {
+      toast.error(`End call failed: ${error}`);
+    }
   };
 
   const connectionState = localStream ? "connected" : "connecting";
-  const error = null;
   return (
     <div className="app">
       <header className="app-header">
@@ -85,8 +85,6 @@ function App() {
           <span
             className={`status-indicator ${connectionState === "connected" ? "connected" : "disconnected"}`}
           ></span>
-
-          {error && <span className="error-message">{error}</span>}
         </div>
       </header>
 

@@ -13,10 +13,8 @@ public static class SignalingModuleServiceCollectionExtensions
     public static IServiceCollection AddSignalingModule(this IServiceCollection services)
     {
         services.AddSingleton<IRoomRepository, InMemoryRoomRepository>();
-
-        services.AddSignalR();
         services.AddSingleton<HubExceptionFilter>();
-        services.AddSingleton<IHubFilter, HubExceptionFilter>(sp => sp.GetRequiredService<HubExceptionFilter>());
+        services.AddSignalR(options => options.AddFilter<HubExceptionFilter>());
 
         return services;
     }
