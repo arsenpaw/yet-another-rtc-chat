@@ -188,66 +188,25 @@
   backdrop-filter: blur(10px);
 }
 
-/* Chat section */
-.chat-section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.chat-messages {
-  flex: 1;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 1rem;
+/* Invitation link section */
+.invitation-link-section {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  max-height: 300px;
-  overflow-y: auto;
 }
 
-.message {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  max-width: 80%;
+.invitation-link-section label {
+  color: #e2e8f0;
+  font-weight: 500;
+  font-size: 0.9rem;
 }
 
-.message.sent {
-  align-self: flex-end;
-  align-items: flex-end;
-}
-
-.message.received {
-  align-self: flex-start;
-  align-items: flex-start;
-}
-
-.message-text {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 0.75rem 1rem;
-  border-radius: 12px;
-  color: white;
-}
-
-.message.sent .message-text {
-  background: rgba(59, 130, 246, 0.6);
-}
-
-.message-time {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.6);
-  margin: 0 0.5rem;
-}
-
-.chat-input {
+.invitation-link-field {
   display: flex;
   gap: 0.5rem;
 }
 
-.chat-input input {
+.invitation-link-field input {
   flex: 1;
   padding: 0.75rem 1rem;
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -255,14 +214,12 @@
   background: rgba(255, 255, 255, 0.1);
   color: white;
   backdrop-filter: blur(10px);
+  font-size: 0.85rem;
+  cursor: text;
 }
 
-.chat-input input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.chat-input button {
-  padding: 0.75rem 1.5rem;
+.invitation-link-field button {
+  padding: 0.75rem 1.25rem;
   border: none;
   border-radius: 8px;
   background: rgba(59, 130, 246, 0.6);
@@ -270,9 +227,10 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
-.chat-input button:hover {
+.invitation-link-field button:hover {
   background: rgba(59, 130, 246, 0.8);
   transform: translateY(-1px);
 }
