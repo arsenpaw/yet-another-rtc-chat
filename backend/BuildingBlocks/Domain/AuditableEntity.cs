@@ -2,7 +2,7 @@
 
 namespace CompanyName.MyMeetings.BuildingBlocks.Domain;
 
-public abstract class AuditableEntity<TId> : Entity<TId>, IAuditableEntity
+public abstract class AuditableEntity<TId> : Entity<TId>, IAuditable
     where TId : TypedIdValueBase
 {
     public DateTime CreatedAt { get; private set; }

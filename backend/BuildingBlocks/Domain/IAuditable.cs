@@ -1,7 +1,7 @@
 ﻿#nullable enable
 namespace CompanyName.MyMeetings.BuildingBlocks.Domain;
 
-public interface IAuditableEntity
+public interface IAuditable
 {
     DateTime CreatedAt { get; }
 

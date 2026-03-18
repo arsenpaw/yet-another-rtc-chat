@@ -4,6 +4,7 @@ import useRtcConnection from "./hooks/useRtcConnection.ts";
 import { useSearchParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
+import { useAuth } from "./hooks/useAuth.ts";
 
 const UID = String(Math.floor(Math.random() * 10000));
 
@@ -76,15 +77,51 @@ function App() {
     }
   };
 
+  const { isLoading, username, logout } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="app">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+          }}
+        >
+          <p>Authenticating...</p>
+        </div>
+      </div>
+    );
+  }
+
   const connectionState = localStream ? "connected" : "connecting";
   return (
     <div className="app">
       <header className="app-header">
         <h1>RTC Messenger</h1>
-        <div className="connection-status">
-          <span
-            className={`status-indicator ${connectionState === "connected" ? "connected" : "disconnected"}`}
-          ></span>
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          {username && <span style={{ color: "#ccc" }}>👤 {username}</span>}
+          <button
+            onClick={logout}
+            style={{
+              padding: "0.4rem 0.8rem",
+              borderRadius: "6px",
+              border: "none",
+              cursor: "pointer",
+              background: "#e74c3c",
+              color: "white",
+              fontWeight: 600,
+            }}
+          >
+            Logout
+          </button>
+          <div className="connection-status">
+            <span
+              className={`status-indicator ${connectionState === "connected" ? "connected" : "disconnected"}`}
+            ></span>
+          </div>
         </div>
       </header>
 

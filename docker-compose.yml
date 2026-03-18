@@ -2,25 +2,21 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:26.1
     container_name: keycloak
-    command: start-dev
+    command: 
+      - "start-dev"
+      - "--import-realm" # Tells Keycloak to look for JSON files in /opt/keycloak/data/import
     environment:
       KC_DB: dev-mem
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KC_HTTP_PORT: 8080
+      KC_REALM_NAME: "rtc-chat" 
     ports:
       - "8080:8080"
     volumes:
       - keycloak_data:/opt/keycloak/data
-
-  redis:
-    image: redis:7-alpine
-    container_name: redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
+      # Place your realm JSON file in a local 'realms' folder
+      - ./realms:/opt/keycloak/data/import
 
 volumes:
   keycloak_data:
-  redis_data:
