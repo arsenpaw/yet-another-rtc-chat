@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Application\Backend.Modules.Signaling.Application.csproj" />
     <ProjectReference Include="..\Domain\Backend.Modules.Signaling.Domain.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Infrastructure\Backend.BuildingBlocks.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Serilog" Version="4.3.1" />

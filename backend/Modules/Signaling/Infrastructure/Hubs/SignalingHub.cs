@@ -1,14 +1,14 @@
 ﻿#nullable enable
 
+using CompanyName.MyMeetings.BuildingBlocks.Infrastructure.Hubs;
 using CompanyName.MyMeetings.Modules.Administration.Domain;
 using CompanyName.MyMeetings.Modules.Signaling.Application.Hubs;
 using CompanyName.MyMeetings.Modules.Signaling.Application.Repositories;
-using Microsoft.AspNetCore.SignalR;
 using Serilog;
 
 namespace CompanyName.MyMeetings.Modules.Signaling.Infrastructure.Hubs;
 
-public class SignalingHub : Hub<ISignalingHubClient>
+public class SignalingHub : AuthenticatedHub<ISignalingHubClient>
 {
     private readonly IRoomRepository _roomRepository;
     private readonly ILogger _logger;
@@ -224,10 +224,4 @@ public class SignalingHub : Hub<ISignalingHubClient>
     }
 
     private static string GetRoomGroupName(Guid roomId) => $"room_{roomId}";
-
-    private Guid GetUserId()
-    {
-        var userIdClaim = Context.User?.FindFirst("sub")?.Value;
-        return userIdClaim != null ? Guid.Parse(userIdClaim) : Guid.Empty;
-    }
 }

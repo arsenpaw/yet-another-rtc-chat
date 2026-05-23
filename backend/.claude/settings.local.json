@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(xargs grep *)"
+      "Bash(xargs grep *)",
+      "Read(//mnt/d/Repos/yet-another-rtc-chat/**)",
+      "Bash(dotnet build *)"
     ]
   }
 }

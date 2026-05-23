@@ -23,6 +23,7 @@ try
         .WriteTo.Console());
 
     builder.AddApplicationSettings(out var applicationSettings);
+    builder.Services.AddAuth0(applicationSettings.Auth0);
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -44,6 +45,9 @@ try
     app.UseSwaggerUI();
 
     app.UseCors(corsPolicyName);
+
+    app.UseAuthentication();
+    app.UseAuthorization();
 
     app.UseSerilogRequestLogging();
 
