@@ -10,5 +10,5 @@ namespace CompanyName.MyMeetings.BuildingBlocks.Infrastructure.Hubs;
 public abstract class AuthenticatedHub<T> : Hub<T>
     where T : class
 {
-    protected Guid GetUserId() => Context.User.GetUserId();
+    protected string GetUserSubject() => Context.User.GetUserSubject();
 }

@@ -8,9 +8,9 @@ public class RoomCreatedDomainEvent : DomainEventBase
 {
     public RoomId RoomId { get; }
 
-    public Guid OwnerId { get; }
+    public string OwnerId { get; }
 
-    public RoomCreatedDomainEvent(RoomId roomId, Guid ownerId)
+    public RoomCreatedDomainEvent(RoomId roomId, string ownerId)
     {
         RoomId = roomId;
         OwnerId = ownerId;

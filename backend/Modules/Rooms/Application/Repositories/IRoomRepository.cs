@@ -16,7 +16,7 @@ public interface IRoomRepository
 
     Task DeleteAsync(Room room, CancellationToken cancellationToken = default);
 
-    Task<Room?> GetActiveRoomByOwnerAsync(Guid ownerId, CancellationToken cancellationToken = default);
+    Task<int> CountActiveRoomsByOwnerAsync(string ownerId, CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Room>> GetRoomsByOwnerAsync(Guid ownerId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Room>> GetRoomsByOwnerAsync(string ownerId, CancellationToken cancellationToken = default);
 }

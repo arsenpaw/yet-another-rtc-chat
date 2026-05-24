@@ -24,7 +24,7 @@ internal class SignalRDocumentFilter : IDocumentFilter
             new OpenApiTag
             {
                 Name = "SignalingHub",
-                Description = "Connect to `/hubs/signaling`. Pass JWT as `?access_token=` query parameter. Room CRUD methods are deprecated — use the Rooms REST API."
+                Description = "Connect to `/hubs/signaling`. Pass JWT as `?access_token=` query parameter. Use `/hubs/rooms` to join a room first."
             }
         ];
 
@@ -44,7 +44,7 @@ internal class SignalRDocumentFilter : IDocumentFilter
             "/hubs/rooms/LeaveRoom",
             "RoomsHub",
             "LeaveRoom",
-            "Leaves the current room.\n\n**Callbacks sent by server:**\n- `ParticipantLeft(userId: Guid)` → all remaining participants",
+            "Leaves the current room.\n\n**Callbacks sent by server:**\n- `ParticipantLeft(userId: string)` → all remaining participants",
             null);
 
         AddHubMethod(
@@ -82,48 +82,6 @@ internal class SignalRDocumentFilter : IDocumentFilter
                 ["toConnectionId"] = new() { Type = "string" },
                 ["candidate"] = new() { Type = "string" }
             });
-
-        AddHubMethod(
-            swaggerDoc,
-            "/hubs/signaling/CreateRoom",
-            "SignalingHub",
-            "CreateRoom ⚠ DEPRECATED",
-            "**Deprecated.** Use `POST /api/rooms` instead.\n\nCreates a room and returns its `Guid`.",
-            null,
-            deprecated: true);
-
-        AddHubMethod(
-            swaggerDoc,
-            "/hubs/signaling/JoinRoom",
-            "SignalingHub",
-            "JoinRoom ⚠ DEPRECATED",
-            "**Deprecated.** Use `/hubs/rooms` instead.\n\nJoins a room.\n\n**Callbacks:** `JoinedRoom`, `ParticipantsList`, `ParticipantJoined`.",
-            new Dictionary<string, OpenApiSchema>
-            {
-                ["roomId"] = new() { Type = "string", Format = "uuid" }
-            },
-            deprecated: true);
-
-        AddHubMethod(
-            swaggerDoc,
-            "/hubs/signaling/LeaveRoom",
-            "SignalingHub",
-            "LeaveRoom ⚠ DEPRECATED",
-            "**Deprecated.** Use `/hubs/rooms` instead.\n\nLeaves the current room. Broadcasts `ParticipantLeft`.",
-            null,
-            deprecated: true);
-
-        AddHubMethod(
-            swaggerDoc,
-            "/hubs/signaling/CloseRoom",
-            "SignalingHub",
-            "CloseRoom ⚠ DEPRECATED",
-            "**Deprecated.** Use `DELETE /api/rooms/{id}` instead.\n\nCloses a room. Broadcasts `RoomClosed` to all participants.",
-            new Dictionary<string, OpenApiSchema>
-            {
-                ["roomId"] = new() { Type = "string", Format = "uuid" }
-            },
-            deprecated: true);
     }
 
     private static void AddHubMethod(

@@ -11,10 +11,6 @@ internal static class AuthExtensions
             {
                 options.Authority = $"https://{settings.Domain}/";
                 options.Audience = settings.Audience;
-                options.TokenValidationParameters = new()
-                {
-                    RoleClaimType = settings.RoleClaimType,
-                };
 
                 // SignalR cannot set headers in the browser WebSocket handshake,
                 // so the token is passed as ?access_token= query param instead.

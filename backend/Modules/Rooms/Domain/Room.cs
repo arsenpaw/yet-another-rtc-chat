@@ -10,7 +10,7 @@ public class Room : AuditableEntity<RoomId>, IAggregateRoot
 {
     private readonly List<Participant> _participants = [];
 
-    public Guid OwnerId { get; private set; }
+    public string OwnerId { get; private set; } = string.Empty;
 
     public int MaxParticipants { get; private set; } = 2;
 
@@ -22,8 +22,10 @@ public class Room : AuditableEntity<RoomId>, IAggregateRoot
     {
     }
 
-    public static Room Create(Guid ownerId)
+    public static Room Create(string ownerId, int currentActiveRoomsCount)
     {
+        CheckRule(new UserActiveRoomsLimitRule(currentActiveRoomsCount));
+
         var room = new Room
         {
             Id = RoomId.New(),
@@ -37,9 +39,9 @@ public class Room : AuditableEntity<RoomId>, IAggregateRoot
         return room;
     }
 
-    public bool IsOwnedBy(Guid userId) => OwnerId == userId;
+    public bool IsOwnedBy(string userId) => OwnerId == userId;
 
-    public Participant AddParticipant(Guid userId, string connectionId)
+    public Participant AddParticipant(string userId, string connectionId)
     {
         CheckRule(new RoomMustBeActiveRule(IsActive));
         CheckRule(new RoomCannotExceedMaxParticipantsRule(_participants.Count, MaxParticipants));

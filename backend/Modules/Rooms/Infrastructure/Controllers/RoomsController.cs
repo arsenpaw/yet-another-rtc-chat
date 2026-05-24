@@ -24,27 +24,21 @@ public class RoomsController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(object), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateRoomAsync()
     {
-        var userId = User.GetUserId();
+        var userId = User.GetUserSubject();
+        var activeCount = await _roomRepository.CountActiveRoomsByOwnerAsync(userId);
 
-        var existing = await _roomRepository.GetActiveRoomByOwnerAsync(userId);
-        if (existing is not null)
-        {
-            return Conflict(new { message = "You already have an active room.", roomId = existing.Id.Value });
-        }
-
-        var room = Room.Create(userId);
+        var room = Room.Create(userId, activeCount);
         await _roomRepository.AddAsync(room);
-        return CreatedAtAction(nameof(GetRoomAsync), new { id = room.Id.Value }, new { id = room.Id.Value });
+        return CreatedAtAction(nameof(CreateRoomAsync), new { id = room.Id.Value }, new { id = room.Id.Value });
     }
 
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<RoomSummaryDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetMyRoomsAsync()
     {
-        var userId = User.GetUserId();
+        var userId = User.GetUserSubject();
         var rooms = await _roomRepository.GetRoomsByOwnerAsync(userId);
         var dtos = rooms.Select(r => new RoomSummaryDto(
             r.Id.Value,
@@ -88,7 +82,7 @@ public class RoomsController : ControllerBase
             return NotFound();
         }
 
-        if (!room.IsOwnedBy(User.GetUserId()))
+        if (!room.IsOwnedBy(User.GetUserSubject()))
         {
             return Forbid();
         }

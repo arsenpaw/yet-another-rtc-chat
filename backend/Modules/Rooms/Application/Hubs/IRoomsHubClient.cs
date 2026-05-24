@@ -10,15 +10,15 @@ public interface IRoomsHubClient
 
     Task ParticipantJoined(ParticipantDto participant);
 
-    Task ParticipantLeft(Guid userId);
+    Task ParticipantLeft(string userId);
 
     Task RoomClosed();
 
     Task Error(string message);
 }
 
-public record ParticipantDto(Guid UserId, bool IsConnected);
+public record ParticipantDto(string UserId, bool IsConnected);
 
-public record RoomDetailDto(Guid Id, Guid OwnerId, int MaxParticipants, bool IsActive, IEnumerable<ParticipantDto> Participants);
+public record RoomDetailDto(Guid Id, string OwnerId, int MaxParticipants, bool IsActive, IEnumerable<ParticipantDto> Participants);
 
-public record RoomSummaryDto(Guid Id, Guid OwnerId, int MaxParticipants, int ParticipantCount, bool IsActive);
+public record RoomSummaryDto(Guid Id, string OwnerId, int MaxParticipants, int ParticipantCount, bool IsActive);

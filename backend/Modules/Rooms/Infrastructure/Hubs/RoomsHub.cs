@@ -21,7 +21,7 @@ public class RoomsHub : AuthenticatedHub<IRoomsHubClient>
 
     public async Task JoinRoom(Guid roomId)
     {
-        var userId = GetUserId();
+        var userId = GetUserSubject();
         var room = await _roomRepository.GetByIdAsync(new RoomId(roomId));
 
         if (room == null)

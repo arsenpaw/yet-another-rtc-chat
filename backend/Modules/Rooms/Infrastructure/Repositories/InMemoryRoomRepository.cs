@@ -41,13 +41,13 @@ public class InMemoryRoomRepository : IRoomRepository
         return Task.CompletedTask;
     }
 
-    public Task<Room?> GetActiveRoomByOwnerAsync(Guid ownerId, CancellationToken cancellationToken = default)
+    public Task<int> CountActiveRoomsByOwnerAsync(string ownerId, CancellationToken cancellationToken = default)
     {
-        var room = _rooms.Values.FirstOrDefault(r => r.OwnerId == ownerId && r.IsActive);
-        return Task.FromResult(room);
+        var count = _rooms.Values.Count(r => r.OwnerId == ownerId && r.IsActive);
+        return Task.FromResult(count);
     }
 
-    public Task<IEnumerable<Room>> GetRoomsByOwnerAsync(Guid ownerId, CancellationToken cancellationToken = default)
+    public Task<IEnumerable<Room>> GetRoomsByOwnerAsync(string ownerId, CancellationToken cancellationToken = default)
     {
         var rooms = _rooms.Values.Where(r => r.OwnerId == ownerId);
         return Task.FromResult(rooms);

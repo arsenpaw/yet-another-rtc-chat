@@ -6,9 +6,9 @@ namespace CompanyName.MyMeetings.BuildingBlocks.Infrastructure.Auth0;
 
 public static class ClaimsPrincipalExtensions
 {
-    public static Guid GetUserId(this ClaimsPrincipal? principal)
+    public static string GetUserSubject(this ClaimsPrincipal? principal)
     {
-        var value = principal?.FindFirst("sub")?.Value;
-        return value is not null ? Guid.Parse(value) : Guid.Empty;
+        return principal?.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value
+            ?? string.Empty;
     }
 }

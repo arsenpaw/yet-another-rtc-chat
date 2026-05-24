@@ -4,6 +4,7 @@ using CompanyName.MyMeetings.Modules.Rooms.Infrastructure;
 using CompanyName.MyMeetings.Modules.Rooms.Infrastructure.Hubs;
 using CompanyName.MyMeetings.Modules.Signaling.Infrastructure;
 using CompanyName.MyMeetings.Modules.Signaling.Infrastructure.Hubs;
+using Hellang.Middleware.ProblemDetails;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -25,8 +26,9 @@ try
         .WriteTo.Console());
 
     builder.AddApplicationSettings(out var applicationSettings);
+    builder.Services.AddExceptionHandling();
     builder.Services.AddAuth0(applicationSettings.Auth0);
-    builder.Services.AddControllers();
+    builder.Services.AddControllers(options => options.SuppressAsyncSuffixInActionNames = false);
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerDocumentation();
     builder.Services.AddCors(options =>
@@ -44,6 +46,7 @@ try
 
     var app = builder.Build();
 
+    app.UseProblemDetails();
     app.UseSwaggerDocumentation();
 
     app.UseCors(corsPolicyName);
