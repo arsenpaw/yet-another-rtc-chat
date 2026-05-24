@@ -1,16 +1,16 @@
-﻿#nullable enable
+#nullable enable
 
 using CompanyName.MyMeetings.BuildingBlocks.Domain;
 
-namespace CompanyName.MyMeetings.Modules.Administration.Domain;
+namespace CompanyName.MyMeetings.Modules.Rooms.Domain;
 
 public class Participant : Entity
 {
-    public string Id { get; private set; } = default!;
+    public string ConnectionId { get; private set; } = default!;
 
     public RoomId RoomId { get; private set; } = default!;
 
-    public Guid UserId { get; private set; }
+    public string UserId { get; private set; } = string.Empty;
 
     public DateTime JoinedAt { get; private set; }
 
@@ -22,11 +22,11 @@ public class Participant : Entity
     {
     }
 
-    public static Participant Create(RoomId roomId, Guid userId, string connectionId)
+    public static Participant Create(RoomId roomId, string userId, string connectionId)
     {
         return new Participant
         {
-            Id = connectionId,
+            ConnectionId = connectionId,
             RoomId = roomId,
             UserId = userId,
             JoinedAt = DateTime.UtcNow,

@@ -1,8 +1,8 @@
-﻿#nullable enable
+#nullable enable
 
 using CompanyName.MyMeetings.BuildingBlocks.Domain;
 
-namespace CompanyName.MyMeetings.Modules.Administration.Domain;
+namespace CompanyName.MyMeetings.Modules.Rooms.Domain;
 
 public class RoomId : TypedIdValueBase
 {

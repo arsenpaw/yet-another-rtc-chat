@@ -1,8 +1,8 @@
-﻿#nullable enable
+#nullable enable
 
 using CompanyName.MyMeetings.BuildingBlocks.Domain;
 
-namespace CompanyName.MyMeetings.Modules.Administration.Domain.Events;
+namespace CompanyName.MyMeetings.Modules.Rooms.Domain.Events;
 
 public class ParticipantLeftRoomDomainEvent : DomainEventBase
 {

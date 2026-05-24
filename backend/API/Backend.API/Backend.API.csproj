@@ -11,11 +11,12 @@
     <DocumentationFile>bin\Debug\CompanyName.MyMeetings.API.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Modules\Signaling\Infrastructure\Backend.Modules.Signaling.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Rooms\Infrastructure\Backend.Modules.Rooms.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Modules\" />
