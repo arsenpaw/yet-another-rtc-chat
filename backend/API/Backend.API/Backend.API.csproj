@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Modules\Signaling\Infrastructure\Backend.Modules.Signaling.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Rooms\Infrastructure\Backend.Modules.Rooms.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Modules\" />

@@ -19,6 +19,7 @@ public class SignalingHub : AuthenticatedHub<ISignalingHubClient>
         _logger = Log.ForContext<SignalingHub>();
     }
 
+    [Obsolete("Use the Rooms module hub (/hubs/rooms). Will be removed in a future version.")]
     public async Task JoinRoom(Guid roomId)
     {
         var userId = GetUserId();
@@ -78,34 +79,10 @@ public class SignalingHub : AuthenticatedHub<ISignalingHubClient>
             roomId);
     }
 
+    [Obsolete("Use the Rooms module hub (/hubs/rooms). Will be removed in a future version.")]
     public async Task LeaveRoom()
     {
-        var room = await _roomRepository.GetByParticipantConnectionIdAsync(Context.ConnectionId);
-
-        if (room == null)
-        {
-            return;
-        }
-
-        var participant = room.Participants.FirstOrDefault(p => p.Id == Context.ConnectionId);
-
-        if (participant == null)
-        {
-            return;
-        }
-
-        participant.Disconnect();
-        room.RemoveParticipant(participant.Id);
-        await _roomRepository.UpdateAsync(room);
-
-        await Groups.RemoveFromGroupAsync(Context.ConnectionId, GetRoomGroupName(room.Id.Value));
-
-        await Clients.OthersInGroup(GetRoomGroupName(room.Id.Value)).ParticipantLeft(participant.Id);
-
-        _logger.Information(
-            "Participant {ConnectionId} left room {RoomId}",
-            participant.Id,
-            room.Id.Value);
+        await HandleLeaveRoomAsync();
     }
 
     public async Task SendOffer(string toConnectionId, string sdp)
@@ -189,6 +166,7 @@ public class SignalingHub : AuthenticatedHub<ISignalingHubClient>
             room.Id.Value);
     }
 
+    [Obsolete("Use the Rooms module REST API (POST /api/rooms). Will be removed in a future version.")]
     public async Task<Guid> CreateRoom()
     {
         var room = Room.Create();
@@ -199,6 +177,7 @@ public class SignalingHub : AuthenticatedHub<ISignalingHubClient>
         return room.Id.Value;
     }
 
+    [Obsolete("Use the Rooms module REST API (DELETE /api/rooms/{id}). Will be removed in a future version.")]
     public async Task CloseRoom(Guid roomId)
     {
         var room = await _roomRepository.GetByIdAsync(new RoomId(roomId));
@@ -219,8 +198,35 @@ public class SignalingHub : AuthenticatedHub<ISignalingHubClient>
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        await LeaveRoom();
+        await HandleLeaveRoomAsync();
         await base.OnDisconnectedAsync(exception);
+    }
+
+    private async Task HandleLeaveRoomAsync()
+    {
+        var room = await _roomRepository.GetByParticipantConnectionIdAsync(Context.ConnectionId);
+        if (room == null)
+        {
+            return;
+        }
+
+        var participant = room.Participants.FirstOrDefault(p => p.Id == Context.ConnectionId);
+        if (participant == null)
+        {
+            return;
+        }
+
+        participant.Disconnect();
+        room.RemoveParticipant(participant.Id);
+        await _roomRepository.UpdateAsync(room);
+
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, GetRoomGroupName(room.Id.Value));
+        await Clients.OthersInGroup(GetRoomGroupName(room.Id.Value)).ParticipantLeft(participant.Id);
+
+        _logger.Information(
+            "Participant {ConnectionId} left room {RoomId}",
+            participant.Id,
+            room.Id.Value);
     }
 
     private static string GetRoomGroupName(Guid roomId) => $"room_{roomId}";

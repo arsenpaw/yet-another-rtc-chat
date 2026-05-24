@@ -1,5 +1,7 @@
 ﻿using CompanyName.MyMeetings.API.Configuration;
 using CompanyName.MyMeetings.API.Configuration.Extensions;
+using CompanyName.MyMeetings.Modules.Rooms.Infrastructure;
+using CompanyName.MyMeetings.Modules.Rooms.Infrastructure.Hubs;
 using CompanyName.MyMeetings.Modules.Signaling.Infrastructure;
 using CompanyName.MyMeetings.Modules.Signaling.Infrastructure.Hubs;
 using Serilog;
@@ -26,7 +28,7 @@ try
     builder.Services.AddAuth0(applicationSettings.Auth0);
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddSwaggerDocumentation();
     builder.Services.AddCors(options =>
     {
         options.AddPolicy(corsPolicyName, policy =>
@@ -38,11 +40,11 @@ try
         });
     });
     builder.Services.AddSignalingModule();
+    builder.Services.AddRoomsModule();
 
     var app = builder.Build();
 
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerDocumentation();
 
     app.UseCors(corsPolicyName);
 
@@ -54,6 +56,7 @@ try
     app.MapControllers();
 
     app.MapHub<SignalingHub>("/hubs/signaling");
+    app.MapHub<RoomsHub>("/hubs/rooms");
 
     app.Run();
 }

@@ -3,7 +3,8 @@
     "allow": [
       "Bash(xargs grep *)",
       "Read(//mnt/d/Repos/yet-another-rtc-chat/**)",
-      "Bash(dotnet build *)"
+      "Bash(dotnet build *)",
+      "Bash(dotnet sln *)"
     ]
   }
 }
