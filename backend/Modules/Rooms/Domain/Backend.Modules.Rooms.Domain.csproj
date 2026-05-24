@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <RootNamespace>CompanyName.MyMeetings.BuildingBlocks.Infrastructure</RootNamespace>
+    <RootNamespace>CompanyName.MyMeetings.Modules.Rooms.Domain</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Domain\Backend.BuildingBlocks.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Serilog" Version="4.3.1" />

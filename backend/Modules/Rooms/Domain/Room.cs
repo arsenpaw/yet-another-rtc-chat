@@ -1,14 +1,16 @@
-﻿#nullable enable
+#nullable enable
 
 using CompanyName.MyMeetings.BuildingBlocks.Domain;
-using CompanyName.MyMeetings.Modules.Administration.Domain.Events;
-using CompanyName.MyMeetings.Modules.Administration.Domain.Rules;
+using CompanyName.MyMeetings.Modules.Rooms.Domain.Events;
+using CompanyName.MyMeetings.Modules.Rooms.Domain.Rules;
 
-namespace CompanyName.MyMeetings.Modules.Administration.Domain;
+namespace CompanyName.MyMeetings.Modules.Rooms.Domain;
 
 public class Room : AuditableEntity<RoomId>, IAggregateRoot
 {
     private readonly List<Participant> _participants = [];
+
+    public string OwnerId { get; private set; } = string.Empty;
 
     public int MaxParticipants { get; private set; } = 2;
 
@@ -20,21 +22,26 @@ public class Room : AuditableEntity<RoomId>, IAggregateRoot
     {
     }
 
-    public static Room Create()
+    public static Room Create(string ownerId, int currentActiveRoomsCount)
     {
+        CheckRule(new UserActiveRoomsLimitRule(currentActiveRoomsCount));
+
         var room = new Room
         {
             Id = RoomId.New(),
+            OwnerId = ownerId,
             IsActive = true
         };
 
         room.SetCreated(DateTime.UtcNow);
-        room.AddDomainEvent(new RoomCreatedDomainEvent(room.Id));
+        room.AddDomainEvent(new RoomCreatedDomainEvent(room.Id, ownerId));
 
         return room;
     }
 
-    public Participant AddParticipant(Guid userId, string connectionId)
+    public bool IsOwnedBy(string userId) => OwnerId == userId;
+
+    public Participant AddParticipant(string userId, string connectionId)
     {
         CheckRule(new RoomMustBeActiveRule(IsActive));
         CheckRule(new RoomCannotExceedMaxParticipantsRule(_participants.Count, MaxParticipants));
@@ -49,7 +56,7 @@ public class Room : AuditableEntity<RoomId>, IAggregateRoot
 
     public void RemoveParticipant(string connectionId)
     {
-        var participant = _participants.FirstOrDefault(p => p.Id == connectionId);
+        var participant = _participants.FirstOrDefault(p => p.ConnectionId == connectionId);
         if (participant != null)
         {
             _participants.Remove(participant);
@@ -62,11 +69,5 @@ public class Room : AuditableEntity<RoomId>, IAggregateRoot
         IsActive = false;
         SetModified(DateTime.UtcNow);
         AddDomainEvent(new RoomClosedDomainEvent(Id));
-    }
-
-    public void Reopen()
-    {
-        IsActive = true;
-        SetModified(DateTime.UtcNow);
     }
 }

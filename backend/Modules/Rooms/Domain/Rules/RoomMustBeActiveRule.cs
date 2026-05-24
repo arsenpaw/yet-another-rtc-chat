@@ -1,8 +1,8 @@
-﻿#nullable enable
+#nullable enable
 
 using CompanyName.MyMeetings.BuildingBlocks.Domain;
 
-namespace CompanyName.MyMeetings.Modules.Administration.Domain.Rules;
+namespace CompanyName.MyMeetings.Modules.Rooms.Domain.Rules;
 
 public class RoomMustBeActiveRule : IBusinessRule
 {

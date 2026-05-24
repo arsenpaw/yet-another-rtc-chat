@@ -1,10 +1,10 @@
-﻿#nullable enable
+#nullable enable
 
 using System.Collections.Concurrent;
-using CompanyName.MyMeetings.Modules.Administration.Domain;
-using CompanyName.MyMeetings.Modules.Signaling.Application.Repositories;
+using CompanyName.MyMeetings.Modules.Rooms.Application.Repositories;
+using CompanyName.MyMeetings.Modules.Rooms.Domain;
 
-namespace CompanyName.MyMeetings.Modules.Signaling.Infrastructure.Repositories;
+namespace CompanyName.MyMeetings.Modules.Rooms.Infrastructure.Repositories;
 
 public class InMemoryRoomRepository : IRoomRepository
 {
@@ -19,7 +19,7 @@ public class InMemoryRoomRepository : IRoomRepository
     public Task<Room?> GetByParticipantConnectionIdAsync(string connectionId, CancellationToken cancellationToken = default)
     {
         var room = _rooms.Values.FirstOrDefault(r =>
-            r.Participants.Any(p => p.Id == connectionId));
+            r.Participants.Any(p => p.ConnectionId == connectionId));
         return Task.FromResult(room);
     }
 
@@ -41,9 +41,15 @@ public class InMemoryRoomRepository : IRoomRepository
         return Task.CompletedTask;
     }
 
-    public Task<IEnumerable<Room>> GetActiveRoomsAsync(CancellationToken cancellationToken = default)
+    public Task<int> CountActiveRoomsByOwnerAsync(string ownerId, CancellationToken cancellationToken = default)
     {
-        var activeRooms = _rooms.Values.Where(r => r.IsActive);
-        return Task.FromResult(activeRooms);
+        var count = _rooms.Values.Count(r => r.OwnerId == ownerId && r.IsActive);
+        return Task.FromResult(count);
+    }
+
+    public Task<IEnumerable<Room>> GetRoomsByOwnerAsync(string ownerId, CancellationToken cancellationToken = default)
+    {
+        var rooms = _rooms.Values.Where(r => r.OwnerId == ownerId);
+        return Task.FromResult(rooms);
     }
 }

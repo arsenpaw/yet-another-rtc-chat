@@ -1,8 +1,8 @@
-﻿#nullable enable
+#nullable enable
 
-using CompanyName.MyMeetings.Modules.Administration.Domain;
+using CompanyName.MyMeetings.Modules.Rooms.Domain;
 
-namespace CompanyName.MyMeetings.Modules.Signaling.Application.Repositories;
+namespace CompanyName.MyMeetings.Modules.Rooms.Application.Repositories;
 
 public interface IRoomRepository
 {
@@ -16,5 +16,7 @@ public interface IRoomRepository
 
     Task DeleteAsync(Room room, CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Room>> GetActiveRoomsAsync(CancellationToken cancellationToken = default);
+    Task<int> CountActiveRoomsByOwnerAsync(string ownerId, CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<Room>> GetRoomsByOwnerAsync(string ownerId, CancellationToken cancellationToken = default);
 }
