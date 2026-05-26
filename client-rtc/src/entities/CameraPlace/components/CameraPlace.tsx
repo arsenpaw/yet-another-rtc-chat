@@ -1,5 +1,4 @@
 import { useRef, useEffect, useState } from 'react';
-import './CameraPlace.css';
 
 interface CameraPlaceProps {
   isLocalCamera?: boolean;

@@ -1,18 +1,18 @@
-import {useCallback, useEffect, useRef, useState} from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { config } from "@/shared/config";
 import {
+    createSignalRSignalingClient,
     type BaseSignalingClient,
     type SignalingMessage,
-    createSignalRSignalingClient
-} from '../lib/signaling';
-import {config} from '../lib/config';
+} from "@/shared/api";
 
 const SERVERS = {
     iceServers: [
-        {urls: ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302']}
+        { urls: ["stun:stun1.l.google.com:19302", "stun:stun2.l.google.com:19302"] }
     ]
 };
 
-const UseRtcConnection = ({uid, localStream, onError}: {
+const UseRtcConnection = ({ uid, localStream, onError }: {
     uid: string,
     localStream: MediaStream | null,
     onError?: (error: unknown) => void
@@ -49,7 +49,7 @@ const UseRtcConnection = ({uid, localStream, onError}: {
         pc.onicecandidate = (event) => {
             if (event.candidate && signalingRef.current) {
                 signalingRef.current.sendMessageToPeer(
-                    {type: 'ice-candidate', message: event.candidate},
+                    { type: 'ice-candidate', message: event.candidate },
                     targetMemberId
                 );
             }
@@ -76,7 +76,7 @@ const UseRtcConnection = ({uid, localStream, onError}: {
         await pc.setLocalDescription(answer);
 
         signalingRef.current?.sendMessageToPeer(
-            {type: 'answer', message: answer},
+            { type: 'answer', message: answer },
             memberId
         );
 
@@ -128,7 +128,7 @@ const UseRtcConnection = ({uid, localStream, onError}: {
                 const offer = await pc.createOffer();
                 await pc.setLocalDescription(offer);
                 await signalingRef.current?.sendMessageToPeer(
-                    {type: 'offer', message: offer},
+                    { type: 'offer', message: offer },
                     memberId,
                 );
             } catch (err) {
@@ -200,7 +200,7 @@ const UseRtcConnection = ({uid, localStream, onError}: {
         });
     }, [localStream]);
 
-    return {startCall, joinCall, endCall, remoteStream};
+    return { startCall, joinCall, endCall, remoteStream };
 };
 
 export default UseRtcConnection;
