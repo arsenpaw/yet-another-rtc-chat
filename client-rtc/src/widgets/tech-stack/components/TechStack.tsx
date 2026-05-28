@@ -4,7 +4,7 @@ import { TechStackItem } from "./TechStackItem";
 
 export const TechStack = () => {
     return (
-        <Card className="rounded-none w-full font-mono text-[#8A707D] bg-transparent border-b-2 border-t-2 border-stone-100">
+        <Card className="rounded-none w-full font-mono text-[#8A707D] bg-transparent border-b-2 border-t-2 border-stone-100 shadow-none py-10 gap-8">
             <CardHeader className="justify-center">
                 <CardTitle className="font-medium uppercase">Built with modern web technologies</CardTitle>
             </CardHeader>
