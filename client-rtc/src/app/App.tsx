@@ -3,7 +3,11 @@
 // import { useSearchParams } from "react-router-dom";
 // import { useState, useEffect, useRef } from "react";
 // import { toast } from "react-toastify";
-import { Button } from "../shared/components/ui/button.tsx";
+import { FeaturesList } from "@/widgets/features-list/components/FeaturesList";
+import { Footer } from "@/widgets/footer/components/Footer";
+import { Hero } from "@/widgets/hero/components/Hero";
+import { Navbar } from "@/widgets/navbar/components";
+import { TechStack } from "@/widgets/tech-stack/components/TechStack";
 
 // const UID = String(Math.floor(Math.random() * 10000));
 
@@ -79,8 +83,14 @@ function App() {
   // const connectionState = localStream ? "connected" : "connecting";
 
   return (
-    <div className="p-4">
-      <Button>Button</Button>
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <main className="flex flex-col items-center gap-24 mx-auto mt-10">
+        <Hero />
+        <TechStack />
+        <FeaturesList />
+        <Footer />
+      </main>
     </div>
   );
 }
