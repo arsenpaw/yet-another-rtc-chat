@@ -3,8 +3,22 @@ import { Card, CardContent } from "@/shared/components/ui/card";
 import ConferencePhoto from "@/shared/assets/conference.png"
 import { Button } from "@/shared/components";
 import { Video } from "lucide-react";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
 
 export const Hero = () => {
+    const { isAuthenticated, loginWithRedirect } = useAuth0();
+    const navigate = useNavigate();
+
+    const handleGetStarted = () => {
+        if (isAuthenticated) {
+            navigate("/rooms");
+        } else {
+            loginWithRedirect({
+                appState: { returnTo: "/rooms" }
+            });
+        }
+    };
     return (
         <div className="flex flex-col md:flex-row items-center gap-10 md:gap-20 px-4">
             <div className="flex flex-col gap-4">
@@ -41,8 +55,9 @@ export const Hero = () => {
                     <br className="hidden md:block" />
                     connections.
                 </p>
-                <Button variant="default" size="lg" className="font-mono">
-                    <Video size={24} />Get Started</Button>
+                <Button variant="default" size="lg" className="font-mono" onClick={handleGetStarted}>
+                    <Video size={24} />Get Started
+                </Button>
             </div>
             <Card className="bg-[#FFF0F0] py-5">
                 <CardContent>
