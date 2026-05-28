@@ -9,8 +9,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <Auth0Provider
-            domain="dev-z5i1q0l732g5x11x.us.auth0.com"
-            clientId="8c3tYk80i729qO5qF5bF3r3ZzC4E8w9n"
+            domain="dev-rtc-identity.eu.auth0.com"
+            clientId="QiYk2G0UHh7NrORUCqfY7BlUAc49oWSr"
             authorizationParams={{
                 redirect_uri: window.location.origin
             }}
