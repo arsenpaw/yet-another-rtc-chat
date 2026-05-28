@@ -6,7 +6,7 @@ import { Video } from "lucide-react";
 
 export const Hero = () => {
     return (
-        <div className="flex items-center gap-20">
+        <div className="flex flex-col md:flex-row items-center gap-10 md:gap-20 px-4">
             <div className="flex flex-col gap-4">
                 <Badge className="font-mono text-primary gap-2 bg-[#FFF0F0]">
                     <span className="relative flex h-2 w-2">
