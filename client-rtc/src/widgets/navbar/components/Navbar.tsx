@@ -12,22 +12,26 @@ export const Navbar = () => {
         <NavigationMenu className="bg-surface/80 border-b border-border w-full max-w-full">
             <div className="flex items-center w-full px-6 py-4">
                 <div className="flex-1">
-                    <Link to="/" className="flex items-center gap-2">
-                        <div className="rounded-full bg-primary p-2">
+                    <div className="flex items-center gap-2">
+                        <Link to="/" className="rounded-full bg-primary p-2">
                             <MessagesSquare size={16} className="text-secondary" />
-                        </div>
-                        <span className="text-2xl text-primary font-semibold font-serif tracking-tight">
+                        </Link >
+                        <Link to="/" className="text-2xl text-primary font-semibold font-serif tracking-tight">
                             Yet Another RTC Chat
-                        </span>
-                    </Link>
+                        </Link>
+                    </div>
                 </div>
 
                 <NavigationMenuList className="flex items-center gap-1">
                     {isAuthenticated && (
-                        <>
-                            <NavigationMenuItem>...</NavigationMenuItem>
-                            <NavigationMenuItem>...</NavigationMenuItem>
-                        </>
+                        <div className="flex items-center gap-4">
+                            <NavigationMenuItem>
+                                <Link to="/rooms" className="text-sm font-medium text-muted-foreground hover:text-foreground">Rooms</Link>
+                            </NavigationMenuItem>
+                            <NavigationMenuItem>
+                                <Link to="/profile" className="text-sm font-medium text-muted-foreground hover:text-foreground">Profile</Link>
+                            </NavigationMenuItem>
+                        </div>
                     )}
                 </NavigationMenuList>
 

@@ -3,11 +3,12 @@
 // import { useSearchParams } from "react-router-dom";
 // import { useState, useEffect, useRef } from "react";
 // import { toast } from "react-toastify";
-import { FeaturesList } from "@/widgets/features-list/components/FeaturesList";
-import { Footer } from "@/widgets/footer/components/Footer";
-import { Hero } from "@/widgets/hero/components/Hero";
-import { Navbar } from "@/widgets/navbar/components";
-import { TechStack } from "@/widgets/tech-stack/components/TechStack";
+import { Route, Routes } from "react-router-dom";
+import { MainLayout } from "./layouts/MainLayout";
+import { HomePage } from "@/pages/home";
+import { RoomsPage } from "@/pages/rooms";
+import { ProtectedRoute } from "@/features/auth";
+import { useAuth0 } from "@auth0/auth0-react";
 
 // const UID = String(Math.floor(Math.random() * 10000));
 
@@ -82,16 +83,25 @@ function App() {
 
   // const connectionState = localStream ? "connected" : "connecting";
 
+  const { isLoading, error } = useAuth0();
+
+  if (isLoading) return <div className="flex items-center justify-center h-screen">
+    <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
+  </div>
+
+  if (error) return <div className="flex items-center justify-center h-screen">
+    <div className="text-2xl text-destructive">Error: {error.message}</div>
+  </div>
+
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main className="flex flex-col items-center gap-24 mx-auto mt-10">
-        <Hero />
-        <TechStack />
-        <FeaturesList />
-        <Footer />
-      </main>
-    </div>
+    <Routes>
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<HomePage />} />
+      </Route>
+      <Route element={<ProtectedRoute />}>
+        <Route path="/rooms" element={<RoomsPage />} />
+      </Route>
+    </Routes>
   );
 }
 

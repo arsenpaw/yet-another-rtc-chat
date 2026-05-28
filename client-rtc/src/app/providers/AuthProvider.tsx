@@ -11,10 +11,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         <Auth0Provider
             domain="dev-rtc-identity.eu.auth0.com"
             clientId="QiYk2G0UHh7NrORUCqfY7BlUAc49oWSr"
-            authorizationParams={{
-                redirect_uri: window.location.origin
-            }}
             onRedirectCallback={onRedirectCallback}
+            useRefreshTokens={true}
+            cacheLocation="localstorage"
+            useRefreshTokensFallback={true}
+            authorizationParams={{
+                redirect_uri: window.location.origin,
+                audience: "https://dev-rtc-identity.eu.auth0.com/api/v2/",
+                scope: "openid profile email offline_access"
+            }}
         >
             {children}
         </Auth0Provider>
