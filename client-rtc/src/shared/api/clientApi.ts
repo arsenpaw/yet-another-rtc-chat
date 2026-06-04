@@ -1,0 +1,29 @@
+import axios from 'axios';
+import { config } from '../config';
+
+export const api = axios.create({
+    baseURL: config.apiBaseUrl,
+});
+
+api.interceptors.request.use(config => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+        console.log("Succeed", token);
+        config.headers.Authorization = `Bearer ${token}`;
+    } else {
+        console.log("Failed");
+    }
+    return config;
+}, error => {
+    return Promise.reject(error);
+});
+
+api.interceptors.response.use(response => {
+    return response;
+}, error => {
+    if (error.response.status === 401) {
+        localStorage.removeItem('access_token');
+        window.location.href = '/login';
+    }
+    return Promise.reject(error);
+});
