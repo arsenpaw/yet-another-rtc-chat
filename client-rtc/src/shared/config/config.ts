@@ -1,5 +1,5 @@
 export const config = {
-    apiBaseUrl: import.meta.env.VITE_API_BASE_URL as string || 'http://localhost:5000',
+    apiBaseUrl: import.meta.env.VITE_API_BASE_URL as string || 'http://localhost:5000/api',
     signalingHubPath: '/hubs/signaling',
 
     get signalingHubUrl(): string {
