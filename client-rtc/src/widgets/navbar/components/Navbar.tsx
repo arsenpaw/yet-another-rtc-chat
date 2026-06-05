@@ -9,43 +9,45 @@ export const Navbar = () => {
     const { isAuthenticated } = useAuth0();
 
     return (
-        <NavigationMenu className="bg-surface/80 border-b border-border w-full max-w-full">
-            <div className="flex items-center w-full px-6 py-4">
-                <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                        <Link to="/" className="rounded-full bg-primary p-2">
-                            <MessagesSquare size={16} className="text-secondary" />
-                        </Link >
-                        <Link to="/" className="text-2xl text-primary font-semibold font-serif tracking-tight">
-                            Yet Another RTC Chat
-                        </Link>
+        <header className="w-full border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-50">
+            <NavigationMenu className="w-full max-w-full justify-start h-16"> {/* h-16 задасть фіксовану висоту */}
+                <div className="flex items-center w-full px-6">
+                    <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                            <Link to="/" className="rounded-full bg-primary p-2">
+                                <MessagesSquare size={16} className="text-secondary" />
+                            </Link >
+                            <Link to="/" className="text-2xl text-primary font-semibold font-serif tracking-tight">
+                                Yet Another RTC Chat
+                            </Link>
+                        </div>
+                    </div>
+
+                    <NavigationMenuList className="flex items-center gap-1">
+                        {isAuthenticated && (
+                            <div className="flex items-center gap-4">
+                                <NavigationMenuItem>
+                                    <Link to="/rooms" className="text-sm font-medium text-muted-foreground hover:text-foreground">Rooms</Link>
+                                </NavigationMenuItem>
+                                <NavigationMenuItem>
+                                    <Link to="/profile" className="text-sm font-medium text-muted-foreground hover:text-foreground">Profile</Link>
+                                </NavigationMenuItem>
+                            </div>
+                        )}
+                    </NavigationMenuList>
+
+                    <div className="flex-1 flex justify-end">
+                        {isAuthenticated ? (
+                            <UserAvatar />
+                        ) : (
+                            <div className="flex items-center gap-2">
+                                <RegisterButton />
+                                <LoginButton />
+                            </div>
+                        )}
                     </div>
                 </div>
-
-                <NavigationMenuList className="flex items-center gap-1">
-                    {isAuthenticated && (
-                        <div className="flex items-center gap-4">
-                            <NavigationMenuItem>
-                                <Link to="/rooms" className="text-sm font-medium text-muted-foreground hover:text-foreground">Rooms</Link>
-                            </NavigationMenuItem>
-                            <NavigationMenuItem>
-                                <Link to="/profile" className="text-sm font-medium text-muted-foreground hover:text-foreground">Profile</Link>
-                            </NavigationMenuItem>
-                        </div>
-                    )}
-                </NavigationMenuList>
-
-                <div className="flex-1 flex justify-end">
-                    {isAuthenticated ? (
-                        <UserAvatar />
-                    ) : (
-                        <div className="flex items-center gap-2">
-                            <RegisterButton />
-                            <LoginButton />
-                        </div>
-                    )}
-                </div>
-            </div>
-        </NavigationMenu>
+            </NavigationMenu>
+        </header>
     );
 };
