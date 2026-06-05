@@ -10,6 +10,7 @@ import { RoomsPage } from "@/pages/rooms";
 import { ProtectedRoute } from "@/features/auth";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
+import { MainLayoutNoFooter } from "./layouts/MainLayoutNoFooter";
 
 // const UID = String(Math.floor(Math.random() * 10000));
 
@@ -119,7 +120,9 @@ function App() {
         <Route path="/" element={<HomePage />} />
       </Route>
       <Route element={<ProtectedRoute />}>
-        <Route path="/rooms" element={<RoomsPage />} />
+        <Route element={<MainLayoutNoFooter />}>
+          <Route path="/rooms" element={<RoomsPage />} />
+        </Route>
       </Route>
     </Routes>
   );
