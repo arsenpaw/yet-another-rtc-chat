@@ -18,6 +18,10 @@ export {
 } from "./ui";
 
 export {
+    Badge
+} from "./ui";
+
+export {
     NavigationMenu,
     NavigationMenuContent,
     NavigationMenuItem,
