@@ -7,6 +7,11 @@ export const getRooms = async (): Promise<RoomSummary[]> => {
 };
 
 export const getRoom = async (id: string): Promise<RoomDetails> => {
-    const response = await api.get<RoomDetails>(`api/rooms/${id}`);
+    const response = await api.get<RoomDetails>(`/rooms/${id}`);
+    return response.data;
+};
+
+export const createRoom = async (): Promise<{ id: string }> => {
+    const response = await api.post<{ id: string }>('/rooms');
     return response.data;
 };
