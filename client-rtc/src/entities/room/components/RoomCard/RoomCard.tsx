@@ -2,6 +2,7 @@ import { Badge, Button } from "@/shared/components";
 import type { RoomSummary } from "../../models";
 import { Card, CardTitle } from "@/shared/components/ui";
 import { Trash, Users } from "lucide-react";
+import { JoinRoomButton } from "@/features/rooms/join-room/components";
 
 interface RoomCardProps {
     room?: RoomSummary;
@@ -26,7 +27,7 @@ export const RoomCard = ({ room }: RoomCardProps) => {
             </div>
             <hr />
             <div className="flex items-center gap-2">
-                <Button className="flex-1">Join</Button>
+                <JoinRoomButton roomId={room?.id} />
                 <Button variant="destructive" size="icon"><Trash /></Button>
             </div>
         </Card>
