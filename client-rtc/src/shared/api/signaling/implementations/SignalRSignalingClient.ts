@@ -8,9 +8,11 @@ import type {
     SignalRSignalingClientConfig,
     SignalRSignalingClientEventMap,
     SignalingClientEventMap,
+} from "../interfaces";
+import type {
     RoomInfoDto,
     ParticipantDto
-} from "../interfaces";
+} from "@/shared/api/models";
 
 export class SignalRSignalingClient extends BaseSignalingClient {
     private connection: signalR.HubConnection | null = null;
