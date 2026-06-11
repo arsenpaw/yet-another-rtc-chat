@@ -1,3 +1,6 @@
+// DEPRECATED. 
+// Use useRoom hook instead.
+
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { config } from "@/shared/config";
 import {
