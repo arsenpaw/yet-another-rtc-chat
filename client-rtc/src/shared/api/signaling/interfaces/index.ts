@@ -1,5 +1,6 @@
-export type SignalingMessageType = 'offer' | 'answer' | 'ice-candidate';
+import type { RoomInfoDto, ParticipantDto } from "@/shared/api/models";
 
+export type SignalingMessageType = 'offer' | 'answer' | 'ice-candidate';
 
 export interface OfferMessage {
     type: 'offer';
@@ -32,18 +33,6 @@ export interface SignalingClientEventMap {
     'connection-state-changed': (newState: string, reason: string) => void;
     'peers-online-status-changed': (status: Record<string, string>) => void;
     'error': (error: unknown) => void;
-}
-
-export interface RoomInfoDto {
-    id: string;
-    maxParticipants: number;
-    currentParticipants: number;
-}
-
-export interface ParticipantDto {
-    connectionId: string;
-    userId: string;
-    isConnected: boolean;
 }
 
 export interface SignalRSignalingClientConfig extends SignalingClientConfig {
