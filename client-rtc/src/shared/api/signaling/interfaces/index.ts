@@ -36,7 +36,8 @@ export interface SignalingClientEventMap {
 }
 
 export interface SignalRSignalingClientConfig extends SignalingClientConfig {
-    hubUrl: string;
+    signalingHubUrl: string;
+    roomsHubUrl: string;
     accessToken?: () => string | Promise<string>;
 }
 
@@ -58,7 +59,6 @@ export abstract class BaseSignalingClient {
 
     abstract connect(): Promise<void>;
     abstract disconnect(): Promise<void>;
-    abstract startCall(): Promise<string>;
     abstract joinCall(roomId: string): Promise<void>;
     abstract leaveChannel(): Promise<void>;
     abstract sendMessageToPeer(message: SignalingMessage, peerId: string): Promise<void>;

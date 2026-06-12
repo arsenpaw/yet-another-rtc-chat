@@ -15,17 +15,48 @@ import type {
 } from "@/shared/api/models";
 
 export class SignalRSignalingClient extends BaseSignalingClient {
-    private connection: signalR.HubConnection | null = null;
+    private signalingConnection: signalR.HubConnection | null = null;
+    private roomsConnection: signalR.HubConnection | null = null;
     private isConnected: boolean = false;
     private currentRoomId: string | null = null;
-    private hubUrl: string;
+    private signalingHubUrl: string;
+    private roomsHubUrl: string;
     private accessToken?: () => string | Promise<string>;
     private participantIdMap: Map<string, string> = new Map();
 
     constructor(config: SignalRSignalingClientConfig) {
         super(config);
-        this.hubUrl = config.hubUrl;
+        this.signalingHubUrl = config.signalingHubUrl;
+        this.roomsHubUrl = config.roomsHubUrl;
         this.accessToken = config.accessToken;
+    }
+
+    private createConnection(hubUrl: string): signalR.HubConnection {
+        return new signalR.HubConnectionBuilder()
+            .withUrl(hubUrl, { accessTokenFactory: this.accessToken })
+            .withAutomaticReconnect()
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+    }
+
+    private setupLifecycleListeners(connection: signalR.HubConnection, name: string) {
+        connection.onreconnecting((error) => {
+            console.trace(`${name} reconnecting...`, error?.message);
+            this.emit('connection-state-changed', 'Reconnecting', error?.message || 'Connection lost');
+        });
+
+        connection.onreconnected((connectionId) => {
+            console.trace(`${name} reconnected, connectionId:`, connectionId);
+            this.emit('connection-state-changed', 'Connected', `Reconnected with ID: ${connectionId || 'unknown'}`);
+        });
+
+        connection.onclose((err) => {
+            if (this.isConnected) {
+                this.isConnected = false;
+                this.emit('connection-state-changed', 'Disconnected', `${name} closed: ${err?.message}`);
+                this.emit('disconnected');
+            }
+        });
     }
 
     async connect(): Promise<void> {
@@ -34,57 +65,48 @@ export class SignalRSignalingClient extends BaseSignalingClient {
             return;
         }
 
-        console.trace('Connecting to SignalR hub:', this.hubUrl);
+        console.trace('Connecting to SignalR hub:', this.signalingHubUrl);
 
-        const builder = new signalR.HubConnectionBuilder()
-            .withUrl(this.hubUrl, {
-                accessTokenFactory: this.accessToken
-            })
-            .withAutomaticReconnect()
-            .configureLogging(signalR.LogLevel.Information);
+        // const builder = new signalR.HubConnectionBuilder()
+        //     .withUrl(this.signalingHubUrl, {
+        //         accessTokenFactory: this.accessToken
+        //     })
+        //     .withAutomaticReconnect()
+        //     .configureLogging(signalR.LogLevel.Information);
 
-        this.connection = builder.build();
+        this.signalingConnection = this.createConnection(this.signalingHubUrl);
+        this.roomsConnection = this.createConnection(this.roomsHubUrl);
 
-        this.connection.onreconnecting((error) => {
-            console.trace('SignalR reconnecting...', error?.message);
-            this.emit('connection-state-changed', 'Reconnecting', error?.message || 'Connection lost');
-        });
-
-        this.connection.onreconnected((connectionId) => {
-            console.trace('SignalR reconnected, connectionId:', connectionId);
-            this.emit('connection-state-changed', 'Connected', `Reconnected with ID: ${connectionId || 'unknown'}`);
-        });
-
-        this.connection.onclose((error) => {
-            console.trace('SignalR connection closed', error?.message);
-            this.isConnected = false;
-            this.emit('connection-state-changed', 'Disconnected', error?.message || 'Connection closed');
-            this.emit('disconnected');
-        });
+        this.setupLifecycleListeners(this.signalingConnection, 'SignalR');
+        this.setupLifecycleListeners(this.roomsConnection, 'Rooms');
 
         this.setupClientCallbacks();
 
-        await this.connection.start();
-        this.isConnected = true;
-        console.trace('SignalR connected successfully');
-        this.emit('connection-state-changed', 'Connected', 'Successfully connected');
-        this.emit('connected');
+        try {
+            await Promise.all([
+                this.signalingConnection.start(),
+                this.roomsConnection.start()
+            ]);
+
+            this.isConnected = true;
+            console.trace('Both SignalR hubs connected successfully');
+            this.emit('connection-state-changed', 'Connected', 'All hubs ready');
+            this.emit('connected');
+        } catch (err) {
+            console.trace('Failed to connect to SignalR hubs', err);
+            this.emit('connection-state-changed', 'Error', 'Failed to connect to SignalR hubs');
+        }
     }
 
     private setupClientCallbacks(): void {
-        if (!this.connection) return;
+        if (!this.signalingConnection || !this.roomsConnection) return;
 
-        this.connection.on('Error', (message: string) => {
-            console.error('SignalR Error:', message);
-            this.emit('error', message);
-        });
-
-        this.connection.on('JoinedRoom', (roomInfo: RoomInfoDto) => {
+        this.roomsConnection.on('JoinedRoom', (roomInfo: RoomInfoDto) => {
             console.trace('Joined room:', roomInfo);
             this.emitExtended('joined-room', roomInfo);
         });
 
-        this.connection.on('ParticipantsList', (participants: ParticipantDto[]) => {
+        this.roomsConnection.on('ParticipantsList', (participants: ParticipantDto[]) => {
             console.trace('Participants list received:', participants);
             participants.forEach(p => {
                 this.participantIdMap.set(p.connectionId, p.userId);
@@ -97,27 +119,29 @@ export class SignalRSignalingClient extends BaseSignalingClient {
             this.emit('peers-online-status-changed', status);
         });
 
-        this.connection.on('ParticipantJoined', (participant: ParticipantDto) => {
+        this.roomsConnection.on('ParticipantJoined', (participant: ParticipantDto) => {
             console.trace('Participant joined:', participant);
             this.participantIdMap.set(participant.connectionId, participant.userId);
             this.emitExtended('participant-joined', participant);
             this.emit('member-joined', participant.connectionId);
         });
 
-        this.connection.on('ParticipantLeft', (participantId: string) => {
+        this.roomsConnection.on('ParticipantLeft', (participantId: string) => {
             console.trace('Participant left:', participantId);
             this.participantIdMap.delete(participantId);
             this.emitExtended('participant-left', participantId);
             this.emit('member-left', participantId);
         });
 
-        this.connection.on('RoomClosed', () => {
+        this.roomsConnection.on('RoomClosed', () => {
             console.trace('Room closed');
             this.currentRoomId = null;
             this.emitExtended('room-closed');
         });
 
-        this.connection.on('ReceiveOffer', (fromParticipantId: string, sdp: string) => {
+        this.roomsConnection.on('Error', (msg => this.emit('error', `RoomsHub: ${msg}`)));
+
+        this.signalingConnection.on('ReceiveOffer', (fromParticipantId: string, sdp: string) => {
             console.trace('Received offer from:', fromParticipantId);
             const message: OfferMessage = {
                 type: 'offer',
@@ -126,7 +150,7 @@ export class SignalRSignalingClient extends BaseSignalingClient {
             this.emit('message-from-peer', message, fromParticipantId);
         });
 
-        this.connection.on('ReceiveAnswer', (fromParticipantId: string, sdp: string) => {
+        this.signalingConnection.on('ReceiveAnswer', (fromParticipantId: string, sdp: string) => {
             console.trace('Received answer from:', fromParticipantId);
             const message: AnswerMessage = {
                 type: 'answer',
@@ -135,7 +159,7 @@ export class SignalRSignalingClient extends BaseSignalingClient {
             this.emit('message-from-peer', message, fromParticipantId);
         });
 
-        this.connection.on('ReceiveIceCandidate', (fromParticipantId: string, candidate: string) => {
+        this.signalingConnection.on('ReceiveIceCandidate', (fromParticipantId: string, candidate: string) => {
             console.trace('Received ICE candidate from:', fromParticipantId);
             try {
                 const iceCandidate = JSON.parse(candidate) as RTCIceCandidate;
@@ -148,6 +172,105 @@ export class SignalRSignalingClient extends BaseSignalingClient {
                 console.error('Failed to parse ICE candidate:', error);
             }
         });
+
+        this.signalingConnection.on('Error', (msg => this.emit('error', `SignalingHub: ${msg}`)));
+    }
+
+    async join(roomId: string): Promise<void> {
+        if (!this.isConnected || !this.roomsConnection) {
+            throw new Error('Not connected. Call connect() first.');
+        }
+
+        console.trace('Joining room:', roomId);
+
+        await this.roomsConnection.invoke('JoinRoom', roomId);
+        this.currentRoomId = roomId;
+        console.trace('Joined room successfully:', roomId);
+    }
+
+    async leaveChannel(): Promise<void> {
+        if (!this.currentRoomId || !this.roomsConnection) {
+            console.warn('Not in a channel');
+            return;
+        }
+
+        console.trace('Leaving channel:', this.currentRoomId);
+
+        await this.roomsConnection.invoke('LeaveRoom');
+        console.trace('Left channel successfully');
+        this.currentRoomId = null;
+        this.participantIdMap.clear();
+    }
+
+    async sendMessageToPeer(
+        message: SignalingMessage,
+        peerId: string
+    ): Promise<void> {
+        if (!this.isConnected || !this.signalingConnection) {
+            throw new Error('Not connected. Call connect() first.');
+        }
+
+        if (!this.currentRoomId) {
+            throw new Error('Not in a room. Call startCall() or joinCall() first.');
+        }
+
+        console.trace('Sending message to peer:', peerId, 'type:', message.type);
+
+        switch (message.type) {
+            case 'offer':
+                await this.signalingConnection.invoke(
+                    'SendOffer',
+                    peerId,
+                    message.message.sdp
+                );
+                console.trace('Offer sent to:', peerId);
+                break;
+            case 'answer':
+                await this.signalingConnection.invoke(
+                    'SendAnswer',
+                    peerId,
+                    message.message.sdp
+                );
+                console.trace('Answer sent to:', peerId);
+                break;
+            case 'ice-candidate':
+                await this.signalingConnection.invoke(
+                    'SendIceCandidate',
+                    peerId,
+                    JSON.stringify(message.message)
+                );
+                console.trace('ICE candidate sent to:', peerId);
+                break;
+        }
+    }
+
+    async disconnect(): Promise<void> {
+        if (!this.isConnected) {
+            console.warn('Already disconnected');
+            return;
+        }
+
+        console.trace('Disconnecting from SignalR hub');
+
+        this.isConnected = false;
+        if (this.currentRoomId && this.roomsConnection?.state === signalR.HubConnectionState.Connected) {
+            try {
+                await this.roomsConnection.invoke('LeaveRoom');
+            } catch (e) {
+                console.warn('Failed to leave room gracefully, closing connection anyway');
+            }
+        }
+
+        await Promise.all([
+            this.roomsConnection?.stop(),
+            this.signalingConnection?.stop()
+        ])
+        this.roomsConnection = null;
+        this.signalingConnection = null;
+        this.currentRoomId = null;
+
+        console.trace('Disconnected successfully');
+        this.emit('disconnected');
     }
 
     private emitExtended<T extends keyof SignalRSignalingClientEventMap>(
@@ -162,158 +285,14 @@ export class SignalRSignalingClient extends BaseSignalingClient {
         }
     }
 
-    async disconnect(): Promise<void> {
-        if (!this.isConnected) {
-            console.warn('Already disconnected');
-            return;
-        }
-
-        console.trace('Disconnecting from SignalR hub');
-
-        if (this.currentRoomId) {
-            await this.leaveChannel();
-        }
-        await this.connection?.stop();
-        this.isConnected = false;
-        this.connection = null;
-        console.trace('Disconnected successfully');
-        this.emit('disconnected');
-    }
-
-    async tryCreateRoom(): Promise<string> {
-        if (!this.isConnected || !this.connection) {
-            throw new Error('Not connected. Call connect() first.');
-        }
-
-        const createdRoomId = await this.connection.invoke<string>('CreateRoom');
-        console.trace('Room created:', createdRoomId);
-        return createdRoomId;
-    }
-
-    async join(roomId: string): Promise<void> {
-        if (!this.isConnected || !this.connection) {
-            throw new Error('Not connected. Call connect() first.');
-        }
-
-        console.trace('Joining room:', roomId);
-
-        await this.connection.invoke('JoinRoom', roomId);
-        this.currentRoomId = roomId;
-        console.trace('Joined room successfully:', roomId);
-    }
-
-    async startCall(): Promise<string> {
-        if (!this.isConnected || !this.connection) {
-            throw new Error('Not connected. Call connect() first.');
-        }
-
-        console.trace('Starting call, creating room');
-
-        const createdRoomId = await this.tryCreateRoom();
-        await this.join(createdRoomId);
-        return createdRoomId;
-    }
-
     async joinCall(roomId: string): Promise<void> {
-        if (!this.isConnected || !this.connection) {
+        if (!this.isConnected || !this.roomsConnection) {
             throw new Error('Not connected. Call connect() first.');
         }
 
         console.trace('Joining call:', roomId);
 
         await this.join(roomId);
-    }
-
-
-    async leaveChannel(): Promise<void> {
-        if (!this.currentRoomId || !this.connection) {
-            console.warn('Not in a channel');
-            return;
-        }
-
-        console.trace('Leaving channel:', this.currentRoomId);
-
-        await this.connection.invoke('LeaveRoom');
-        console.trace('Left channel successfully');
-        this.currentRoomId = null;
-        this.participantIdMap.clear();
-    }
-
-    async sendMessageToPeer(
-        message: SignalingMessage,
-        peerId: string
-    ): Promise<void> {
-        if (!this.isConnected || !this.connection) {
-            throw new Error('Not connected. Call connect() first.');
-        }
-
-        if (!this.currentRoomId) {
-            throw new Error('Not in a room. Call startCall() or joinCall() first.');
-        }
-
-        console.trace('Sending message to peer:', peerId, 'type:', message.type);
-
-        switch (message.type) {
-            case 'offer':
-                await this.connection.invoke(
-                    'SendOffer',
-                    peerId,
-                    message.message.sdp
-                );
-                console.trace('Offer sent to:', peerId);
-                break;
-            case 'answer':
-                await this.connection.invoke(
-                    'SendAnswer',
-                    peerId,
-                    message.message.sdp
-                );
-                console.trace('Answer sent to:', peerId);
-                break;
-            case 'ice-candidate':
-                await this.connection.invoke(
-                    'SendIceCandidate',
-                    peerId,
-                    JSON.stringify(message.message)
-                );
-                console.trace('ICE candidate sent to:', peerId);
-                break;
-        }
-    }
-
-    async createRoom(maxParticipants: number = 10): Promise<string> {
-        if (!this.isConnected || !this.connection) {
-            throw new Error('Not connected. Call connect() first.');
-        }
-
-        console.trace('Creating room');
-
-        const roomId = await this.connection.invoke<string>('CreateRoom', maxParticipants);
-        console.trace('Room created:', roomId);
-        return roomId;
-    }
-
-    async closeRoom(roomId: string): Promise<void> {
-        if (!this.isConnected || !this.connection) {
-            throw new Error('Not connected. Call connect() first.');
-        }
-
-        console.trace('Closing room:', roomId);
-
-        await this.connection.invoke('CloseRoom', roomId);
-        console.trace('Room closed:', roomId);
-    }
-
-    isChannelJoined(): boolean {
-        return this.currentRoomId !== null;
-    }
-
-    getCurrentRoomId(): string | null {
-        return this.currentRoomId;
-    }
-
-    getConnectionState(): signalR.HubConnectionState | null {
-        return this.connection?.state ?? null;
     }
 }
 

@@ -29,7 +29,7 @@ export const useRoomSession = (roomId: string) => {
     }, [signalingConnected, setConnected]);
 
     useEffect(() => {
-        if (isLoading || !isAuthenticated || !client || !roomId) return;
+        if (isLoading || !isAuthenticated || !client || !roomId || !signalingConnected) return;
 
         const setupSession = async () => {
             try {

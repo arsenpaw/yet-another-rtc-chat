@@ -16,7 +16,8 @@ export const useSignaling = ({ userId, accessTokenFactory }: {
 
         const client = createSignalRSignalingClient({
             uid: userId,
-            hubUrl: config.signalingHubUrl,
+            signalingHubUrl: config.signalingHubUrl,
+            roomsHubUrl: config.roomsHubUrl,
             accessToken: tokenFactoryAdapter,
         });
 
