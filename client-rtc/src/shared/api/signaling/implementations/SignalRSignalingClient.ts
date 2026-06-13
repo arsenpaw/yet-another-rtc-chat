@@ -115,6 +115,11 @@ export class SignalRSignalingClient extends BaseSignalingClient {
             this.currentRoomId = null;
             this.emitExtended('room-closed');
         });
+
+        connection.on('AlreadyInRoom', () => {
+            this.currentRoomId = null;
+            this.emitExtended('already-in-room');
+        });
     }
 
     private setupSignalingCallbacks(): void {

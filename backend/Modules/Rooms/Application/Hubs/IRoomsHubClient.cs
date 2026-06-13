@@ -14,6 +14,8 @@ public interface IRoomsHubClient
 
     Task RoomClosed();
 
+    Task AlreadyInRoom();
+
     Task Error(string message);
 }
 

@@ -19,13 +19,15 @@ interface UseRtcConnectionParams {
     getAccessToken: () => string | Promise<string>;
     onError?: (error: unknown) => void;
     onRoomClosed?: () => void;
+    /** Fired when the server rejects the join because this user is already in the room. */
+    onAlreadyInRoom?: () => void;
 }
 
 /**
  * Owns a single peer connection for a 1:1 call (backend room cap is 2). Peers are
  * addressed by Auth0 userId; existing participants send the offer to a newcomer.
  */
-const useRtcConnection = ({ uid, localStream, getAccessToken, onError, onRoomClosed }: UseRtcConnectionParams) => {
+const useRtcConnection = ({ uid, localStream, getAccessToken, onError, onRoomClosed, onAlreadyInRoom }: UseRtcConnectionParams) => {
     const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
     const signalingRef = useRef<BaseSignalingClient | null>(null);
     const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
@@ -139,6 +141,11 @@ const useRtcConnection = ({ uid, localStream, getAccessToken, onError, onRoomClo
             onRoomClosed?.();
         });
 
+        signaling.onRoom('already-in-room', () => {
+            isCallActive.current = false;
+            onAlreadyInRoom?.();
+        });
+
         signaling.on('member-joined', async (peerUserId: string) => {
             try {
                 makingOffer.current = true;
@@ -178,7 +185,7 @@ const useRtcConnection = ({ uid, localStream, getAccessToken, onError, onRoomClo
         });
 
         await signaling.connect();
-    }, [createPeerConnection, handleAnswer, handleIceCandidate, handleOffer, uid, getAccessToken, onError, onRoomClosed]);
+    }, [createPeerConnection, handleAnswer, handleIceCandidate, handleOffer, uid, getAccessToken, onError, onRoomClosed, onAlreadyInRoom]);
 
     const joinCall = useCallback(async (roomId: string) => {
         if (isCallActive.current) return;

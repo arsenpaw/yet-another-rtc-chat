@@ -48,6 +48,7 @@ export interface SignalRSignalingClientEventMap extends SignalingClientEventMap 
     'participant-joined': (participant: ParticipantDto) => void;
     'participant-left': (userId: string) => void;
     'room-closed': () => void;
+    'already-in-room': () => void;
 }
 
 export abstract class BaseSignalingClient {

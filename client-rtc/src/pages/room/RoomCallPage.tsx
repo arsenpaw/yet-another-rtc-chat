@@ -21,12 +21,18 @@ export const RoomCallPage = () => {
         navigate("/rooms");
     }, [navigate]);
 
+    const onAlreadyInRoom = useCallback(() => {
+        toast.warning("You are already in this room in another tab or window.");
+        navigate("/rooms");
+    }, [navigate]);
+
     const { joinCall, endCall, remoteStream } = useRtcConnection({
         uid: user?.sub ?? "",
         localStream,
         getAccessToken: getAccessTokenSilently,
         onError: (error) => toast.error(`Signaling error: ${error}`),
         onRoomClosed,
+        onAlreadyInRoom,
     });
 
     // Acquire the local camera/microphone once.
