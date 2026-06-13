@@ -10,6 +10,8 @@ public interface IRoomRepository
 
     Task<Room?> GetByParticipantConnectionIdAsync(string connectionId, CancellationToken cancellationToken = default);
 
+    Task<Room?> GetByParticipantUserIdAsync(string userId, CancellationToken cancellationToken = default);
+
     Task AddAsync(Room room, CancellationToken cancellationToken = default);
 
     Task UpdateAsync(Room room, CancellationToken cancellationToken = default);

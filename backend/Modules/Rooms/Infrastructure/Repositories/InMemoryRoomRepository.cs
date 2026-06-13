@@ -23,6 +23,13 @@ public class InMemoryRoomRepository : IRoomRepository
         return Task.FromResult(room);
     }
 
+    public Task<Room?> GetByParticipantUserIdAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        var room = _rooms.Values.FirstOrDefault(r =>
+            r.IsActive && r.Participants.Any(p => p.UserId == userId && p.IsConnected));
+        return Task.FromResult(room);
+    }
+
     public Task AddAsync(Room room, CancellationToken cancellationToken = default)
     {
         _rooms.TryAdd(room.Id.Value, room);

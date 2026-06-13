@@ -1,4 +1,4 @@
-import type { RoomInfoDto, ParticipantDto } from "@/shared/api/models";
+import type { ParticipantDto, RoomDetailDto } from "../../rooms";
 
 export type SignalingMessageType = 'offer' | 'answer' | 'ice-candidate';
 
@@ -42,10 +42,10 @@ export interface SignalRSignalingClientConfig extends SignalingClientConfig {
 }
 
 export interface SignalRSignalingClientEventMap extends SignalingClientEventMap {
-    'joined-room': (roomInfo: RoomInfoDto) => void;
+    'joined-room': (room: RoomDetailDto) => void;
     'participants-list': (participants: ParticipantDto[]) => void;
     'participant-joined': (participant: ParticipantDto) => void;
-    'participant-left': (participantId: string) => void;
+    'participant-left': (userId: string) => void;
     'room-closed': () => void;
 }
 
