@@ -12,11 +12,20 @@ const SERVERS = {
     ]
 };
 
-const UseRtcConnection = ({ uid, localStream, onError }: {
-    uid: string,
-    localStream: MediaStream | null,
-    onError?: (error: unknown) => void
-}) => {
+interface UseRtcConnectionParams {
+    /** The local user's Auth0 subject — used to address peers and break offer glare. */
+    uid: string;
+    localStream: MediaStream | null;
+    getAccessToken: () => string | Promise<string>;
+    onError?: (error: unknown) => void;
+    onRoomClosed?: () => void;
+}
+
+/**
+ * Owns a single peer connection for a 1:1 call (backend room cap is 2). Peers are
+ * addressed by Auth0 userId; existing participants send the offer to a newcomer.
+ */
+const useRtcConnection = ({ uid, localStream, getAccessToken, onError, onRoomClosed }: UseRtcConnectionParams) => {
     const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
     const signalingRef = useRef<BaseSignalingClient | null>(null);
     const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
@@ -26,8 +35,7 @@ const UseRtcConnection = ({ uid, localStream, onError }: {
     const isSettingRemoteAnswerPending = useRef(false);
     const makingOffer = useRef(false);
 
-
-    const createPeerConnection = useCallback((targetMemberId: string) => {
+    const createPeerConnection = useCallback((peerUserId: string) => {
         if (peerConnectionRef.current) {
             peerConnectionRef.current.close();
         }
@@ -50,7 +58,7 @@ const UseRtcConnection = ({ uid, localStream, onError }: {
             if (event.candidate && signalingRef.current) {
                 signalingRef.current.sendMessageToPeer(
                     { type: 'ice-candidate', message: event.candidate },
-                    targetMemberId
+                    peerUserId
                 );
             }
         };
@@ -58,26 +66,32 @@ const UseRtcConnection = ({ uid, localStream, onError }: {
         return pc;
     }, [localStream]);
 
-    const handleOffer = useCallback(async (offer: RTCSessionDescriptionInit, memberId: string) => {
-        const pc = peerConnectionRef.current || createPeerConnection(memberId);
+    const processIceQueue = (pc: RTCPeerConnection) => {
+        while (iceCandidateQueue.current.length > 0) {
+            const candidate = iceCandidateQueue.current.shift();
+            if (candidate) pc.addIceCandidate(candidate);
+        }
+    };
+
+    const handleOffer = useCallback(async (offer: RTCSessionDescriptionInit, peerUserId: string) => {
+        const pc = peerConnectionRef.current || createPeerConnection(peerUserId);
+
         const offerCollision =
-            !makingOffer &&
-            (pc.signalingState === "stable" || isSettingRemoteAnswerPending);
-        const isPolite = memberId > uid;
+            makingOffer.current || (pc.signalingState !== "stable" && !isSettingRemoteAnswerPending.current);
+        const isPolite = peerUserId > uid;
         ignoreOffer.current = !isPolite && offerCollision;
         if (ignoreOffer.current) {
             return;
-
         }
-        await pc.setRemoteDescription(new RTCSessionDescription(offer));
 
+        await pc.setRemoteDescription(new RTCSessionDescription(offer));
 
         const answer = await pc.createAnswer();
         await pc.setLocalDescription(answer);
 
-        signalingRef.current?.sendMessageToPeer(
+        await signalingRef.current?.sendMessageToPeer(
             { type: 'answer', message: answer },
-            memberId
+            peerUserId
         );
 
         processIceQueue(pc);
@@ -87,7 +101,9 @@ const UseRtcConnection = ({ uid, localStream, onError }: {
         const pc = peerConnectionRef.current;
         if (!pc) return;
 
+        isSettingRemoteAnswerPending.current = true;
         await pc.setRemoteDescription(new RTCSessionDescription(answer));
+        isSettingRemoteAnswerPending.current = false;
         processIceQueue(pc);
     }, []);
 
@@ -98,38 +114,40 @@ const UseRtcConnection = ({ uid, localStream, onError }: {
         if (!pc.remoteDescription) {
             iceCandidateQueue.current.push(new RTCIceCandidate(candidate));
         } else {
-            await pc.addIceCandidate(candidate);
+            try {
+                await pc.addIceCandidate(candidate);
+            } catch (err) {
+                if (!ignoreOffer.current) throw err;
+            }
         }
     }, []);
 
-    const processIceQueue = (pc: RTCPeerConnection) => {
-        while (iceCandidateQueue.current.length > 0) {
-            const candidate = iceCandidateQueue.current.shift();
-            if (candidate) pc.addIceCandidate(candidate);
-        }
-    };
-
     const setupSignaling = useCallback(async () => {
-        signalingRef.current = createSignalRSignalingClient({
-            hubUrl: config.signalingHubUrl,
-            uid: uid
+        const signaling = createSignalRSignalingClient({
+            uid,
+            roomsHubUrl: config.roomsHubUrl,
+            signalingHubUrl: config.signalingHubUrl,
+            accessToken: getAccessToken,
         });
+        signalingRef.current = signaling;
 
-        await signalingRef.current.connect();
-
-        signalingRef.current.on('error', (error: unknown) => {
+        signaling.on('error', (error: unknown) => {
             onError?.(error);
         });
 
-        signalingRef.current.on('member-joined', async (memberId: string) => {
+        signaling.onRoom('room-closed', () => {
+            onRoomClosed?.();
+        });
+
+        signaling.on('member-joined', async (peerUserId: string) => {
             try {
                 makingOffer.current = true;
-                const pc = createPeerConnection(memberId);
+                const pc = createPeerConnection(peerUserId);
                 const offer = await pc.createOffer();
                 await pc.setLocalDescription(offer);
                 await signalingRef.current?.sendMessageToPeer(
                     { type: 'offer', message: offer },
-                    memberId,
+                    peerUserId,
                 );
             } catch (err) {
                 console.error('Failed to send offer:', err);
@@ -138,10 +156,17 @@ const UseRtcConnection = ({ uid, localStream, onError }: {
             }
         });
 
-        signalingRef.current.on('message-from-peer', async (msg: SignalingMessage, memberId: string) => {
+        signaling.on('member-left', () => {
+            peerConnectionRef.current?.close();
+            peerConnectionRef.current = null;
+            setRemoteStream(null);
+            iceCandidateQueue.current = [];
+        });
+
+        signaling.on('message-from-peer', async (msg: SignalingMessage, peerUserId: string) => {
             switch (msg.type) {
                 case 'offer':
-                    await handleOffer(msg.message, memberId);
+                    await handleOffer(msg.message, peerUserId);
                     break;
                 case 'answer':
                     await handleAnswer(msg.message);
@@ -151,16 +176,9 @@ const UseRtcConnection = ({ uid, localStream, onError }: {
                     break;
             }
         });
-    }, [createPeerConnection, handleAnswer, handleIceCandidate, handleOffer, uid, onError]);
 
-    const startCall = useCallback(async () => {
-        if (isCallActive.current) return;
-        isCallActive.current = true;
-
-        await setupSignaling();
-        const roomId = await signalingRef.current!.startCall();
-        return roomId;
-    }, [setupSignaling]);
+        await signaling.connect();
+    }, [createPeerConnection, handleAnswer, handleIceCandidate, handleOffer, uid, getAccessToken, onError, onRoomClosed]);
 
     const joinCall = useCallback(async (roomId: string) => {
         if (isCallActive.current) return;
@@ -173,6 +191,7 @@ const UseRtcConnection = ({ uid, localStream, onError }: {
     const endCall = useCallback(async () => {
         isCallActive.current = false;
         await signalingRef.current?.disconnect();
+        signalingRef.current = null;
         peerConnectionRef.current?.close();
         peerConnectionRef.current = null;
         setRemoteStream(null);
@@ -200,7 +219,7 @@ const UseRtcConnection = ({ uid, localStream, onError }: {
         });
     }, [localStream]);
 
-    return { startCall, joinCall, endCall, remoteStream };
+    return { joinCall, endCall, remoteStream };
 };
 
-export default UseRtcConnection;
+export default useRtcConnection;
