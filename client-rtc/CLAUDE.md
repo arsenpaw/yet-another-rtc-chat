@@ -21,13 +21,31 @@ Feature-Sliced Design (`app` / `pages` / `widgets` / `features` / `entities` / `
 - Prefer `useCallback` for handlers passed to event listeners to avoid stale closures.
 - Clean up every event listener and media track in `useEffect` return functions.
 
+# Design System
+
+All design tokens live in `src/app/index.css` (Tailwind v4 `@theme`, light + `.dark`). **Never hardcode hex/oklch in components — always use a token utility.** If a value is missing, add a token rather than inlining a color.
+
+- **Brand color:** `--primary` is a near-black **dark blue** (buttons, brand mark, focus rings). `--feature` / `--feature-muted` are the brighter blue accent for icons/highlights. Destructive stays red.
+- **Surfaces:** `--surface` (cool off-white panels) and `--surface-accent` (soft blue tint). `bg-surface`, `bg-surface-accent`, `text-feature`, `bg-feature-muted` are exposed as utilities.
+- **Fonts** (loaded via `@fontsource-variable/*` in `src/app/main.tsx`):
+  - `font-sans` → **Inter Variable** (body / UI).
+  - `font-display` → **Space Grotesk Variable** (headings, brand, section titles). Use `font-display` for headings, not `font-serif`.
+  - `font-mono` → **JetBrains Mono Variable** (room ids, badges).
+- **Motion:** `tw-animate-css` (`animate-in fade-in slide-in-from-*`, etc.) plus custom keyframes `animate-float` / `animate-pulse-glow` / `animate-gradient`. Always honor the global `prefers-reduced-motion` reset already in `index.css`.
+
+# UI / Copy Rules
+
+- **Never expose implementation details in user-facing UI or copy.** No "SignalR", ".NET", "WebRTC", "ICE", "peer-to-peer signaling", tech-stack lists, hub/endpoint names, etc. Marketing copy and error toasts must be product-focused and generic (e.g. "Connection error", not "Signaling error").
+- Public landing (`/`) is a simple marketing page; the authenticated app (`/rooms`) is where users actually connect.
+
 # Tech Stack
 
-- React 18, TypeScript, Vite
-- `@microsoft/signalr` for the SignalR transport
+- React 19, TypeScript, Vite, Tailwind CSS v4 (CSS-first config in `src/app/index.css`)
+- `@microsoft/signalr` for the SignalR transport (internal only — never surfaced in UI)
 - `react-toastify` for user-facing errors
 - `@tanstack/react-query` for room REST state
 - `react-router-dom` for URL-based room joining (`/rooms/:roomId`)
+- `@fontsource-variable/*` for self-hosted fonts; `tw-animate-css` for animation utilities
 
 # Signaling Protocol
 

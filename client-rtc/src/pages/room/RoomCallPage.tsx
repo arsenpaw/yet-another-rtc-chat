@@ -30,7 +30,7 @@ export const RoomCallPage = () => {
         uid: user?.sub ?? "",
         localStream,
         getAccessToken: getAccessTokenSilently,
-        onError: (error) => toast.error(`Signaling error: ${error}`),
+        onError: (error) => toast.error(`Connection error: ${error}`),
         onRoomClosed,
         onAlreadyInRoom,
     });
@@ -78,20 +78,20 @@ export const RoomCallPage = () => {
     };
 
     return (
-        <div className="w-full max-w-5xl px-6">
+        <div className="w-full max-w-5xl px-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
                 <div className="min-w-0">
                     <h1 className="text-2xl font-semibold tracking-tight text-foreground">Call</h1>
                     <button
                         type="button"
                         onClick={copyRoomId}
-                        className="mt-1 flex items-center gap-1 font-mono text-xs text-muted-foreground hover:text-foreground"
+                        className="group mt-1 flex items-center gap-1 font-mono text-xs text-muted-foreground transition-colors hover:text-primary"
                     >
                         {roomId}
-                        <Copy size={12} />
+                        <Copy size={12} className="transition-transform duration-200 group-hover:scale-125" />
                     </button>
                 </div>
-                <Button variant="destructive" onClick={handleLeave}>
+                <Button variant="destructive" onClick={handleLeave} className="transition-transform duration-200 hover:scale-105">
                     <PhoneOff />
                     Leave
                 </Button>

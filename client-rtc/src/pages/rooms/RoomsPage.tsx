@@ -49,14 +49,18 @@ export const RoomsPage = () => {
     };
 
     return (
-        <div className="w-full max-w-3xl px-6">
+        <div className="w-full max-w-3xl px-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-semibold tracking-tight text-foreground">Rooms</h1>
                     <p className="text-sm text-muted-foreground">Create a room or join an existing one.</p>
                 </div>
-                <Button onClick={() => createMutation.mutate()} disabled={createMutation.isPending}>
-                    <Plus />
+                <Button
+                    onClick={() => createMutation.mutate()}
+                    disabled={createMutation.isPending}
+                    className="transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-md"
+                >
+                    <Plus className={createMutation.isPending ? "animate-spin" : ""} />
                     {createMutation.isPending ? "Creating…" : "Create room"}
                 </Button>
             </div>
@@ -110,7 +114,7 @@ interface RoomRowProps {
 }
 
 const RoomRow = ({ room, isOwner, onJoin, onClose, closing }: RoomRowProps) => (
-    <Card className="flex flex-row items-center justify-between gap-4 px-4">
+    <Card className="group flex flex-row items-center justify-between gap-4 px-4 animate-in fade-in slide-in-from-bottom-3 duration-500 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md">
         <div className="min-w-0">
             <p className="truncate font-mono text-sm text-foreground">{room.id}</p>
             <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
@@ -118,13 +122,14 @@ const RoomRow = ({ room, isOwner, onJoin, onClose, closing }: RoomRowProps) => (
                     <Users size={14} />
                     {room.participantCount}/{room.maxParticipants}
                 </span>
-                <Badge variant={room.isActive ? "default" : "secondary"}>
+                <Badge variant={room.isActive ? "default" : "secondary"} className="gap-1">
+                    {room.isActive && <span className="size-1.5 rounded-full bg-primary-foreground animate-pulse" />}
                     {room.isActive ? "Active" : "Closed"}
                 </Badge>
             </div>
         </div>
         <div className="flex shrink-0 items-center gap-2">
-            <Button size="sm" onClick={onJoin} disabled={!room.isActive}>
+            <Button size="sm" onClick={onJoin} disabled={!room.isActive} className="transition-transform duration-200 hover:scale-105">
                 <Video />
                 Join
             </Button>

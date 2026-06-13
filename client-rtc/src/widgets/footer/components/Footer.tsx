@@ -8,11 +8,11 @@ export const Footer = () => {
                 <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-8">
 
                     <div className="flex flex-col items-center sm:items-start gap-2">
-                        <Link to="/" className="flex items-center gap-2">
-                            <div className="rounded-full bg-primary p-2">
-                                <MessagesSquare size={14} className="text-secondary" />
+                        <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
+                            <div className="rounded-full bg-primary p-2 transition-transform duration-300 hover:scale-110">
+                                <MessagesSquare size={14} className="text-primary-foreground" />
                             </div>
-                            <span className="text-lg text-primary font-semibold font-serif tracking-tight">
+                            <span className="text-lg text-primary font-semibold font-display tracking-tight">
                                 Yet Another RTC Chat
                             </span>
                         </Link>
