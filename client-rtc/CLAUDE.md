@@ -21,16 +21,18 @@ Feature-Sliced Design (`app` / `pages` / `widgets` / `features` / `entities` / `
 - Prefer `useCallback` for handlers passed to event listeners to avoid stale closures.
 - Clean up every event listener and media track in `useEffect` return functions.
 
-# Design System
+# Design System — "Atrium" (single dark theme)
 
-All design tokens live in `src/app/index.css` (Tailwind v4 `@theme`, light + `.dark`). **Never hardcode hex/oklch in components — always use a token utility.** If a value is missing, add a token rather than inlining a color.
+All design tokens live in `src/app/index.css` (Tailwind v4 `@theme inline`, single near-black dark theme). **Never hardcode hex/rgba in components — always use a token utility.** If a value is missing, add a token rather than inlining a color.
 
-- **Brand color:** `--primary` is a near-black **dark blue** (buttons, brand mark, focus rings). `--feature` / `--feature-muted` are the brighter blue accent for icons/highlights. Destructive stays red.
-- **Surfaces:** `--surface` (cool off-white panels) and `--surface-accent` (soft blue tint). `bg-surface`, `bg-surface-accent`, `text-feature`, `bg-feature-muted` are exposed as utilities.
-- **Fonts** (loaded via `@fontsource-variable/*` in `src/app/main.tsx`):
-  - `font-sans` → **Inter Variable** (body / UI).
-  - `font-display` → **Space Grotesk Variable** (headings, brand, section titles). Use `font-display` for headings, not `font-serif`.
-  - `font-mono` → **JetBrains Mono Variable** (room ids, badges).
+- **Reusable primitives live in `src/shared/ui/`** (barrel `@/shared/ui`): `Button`, `Avatar`/`AvatarStack` (initials + tonal fill), `PresenceDot`, `MonoLabel`, `IconTile`, `Chip`, `Logo`, `IconRail`. Compose screens from these; don't re-roll one-off avatars/tiles. (The older shadcn primitives in `src/shared/components/ui` remain for auth/dropdown bits.)
+- **Brand accent:** `--primary` is **`#6d5cff` (violet)** — buttons, active room, links, focus rings, brand mark (`brand-gradient` = `--primary`→`--accent-2`). Destructive is `#e5484d`; online/live is `--online` `#2dd47f`.
+- **Surfaces (dark):** `bg-background` `#09090b`, `bg-base-alt` (chat column), `bg-rail` (side rails), `bg-card`/`bg-panel` `#101013`, `bg-panel-raised` (composer), `bg-control` (idle voice/video tiles). Accent-soft helpers: `bg-accent-soft` / `border-accent-soft-border` / `text-accent-text(-strong)`, plus `--eyebrow`.
+- **Text tones:** `text-foreground`, `text-body`, `text-secondary-text`, `text-muted-foreground`, `text-faint`.
+- **Fonts** (loaded via Google Fonts `<link>` in `index.html`):
+  - `font-sans` / `font-display` → **Hanken Grotesk** (body, UI, headings, brand).
+  - `font-mono` → **JetBrains Mono** (room ids, section labels/eyebrows, timestamps).
+- **Layouts:** `/` uses `MainLayout` (marketing nav + footer); `/rooms` + `/rooms/:roomId` use the full-screen `AppLayout` with each page rendering its own `IconRail` grid.
 - **Motion:** `tw-animate-css` (`animate-in fade-in slide-in-from-*`, etc.) plus custom keyframes `animate-float` / `animate-pulse-glow` / `animate-gradient`. Always honor the global `prefers-reduced-motion` reset already in `index.css`.
 
 # UI / Copy Rules
@@ -45,7 +47,7 @@ All design tokens live in `src/app/index.css` (Tailwind v4 `@theme`, light + `.d
 - `react-toastify` for user-facing errors
 - `@tanstack/react-query` for room REST state
 - `react-router-dom` for URL-based room joining (`/rooms/:roomId`)
-- `@fontsource-variable/*` for self-hosted fonts; `tw-animate-css` for animation utilities
+- Hanken Grotesk + JetBrains Mono via Google Fonts (`index.html`); `tw-animate-css` for animation utilities
 
 # Signaling Protocol
 

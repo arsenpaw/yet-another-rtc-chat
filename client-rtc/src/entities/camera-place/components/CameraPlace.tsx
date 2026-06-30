@@ -7,6 +7,13 @@ interface CameraPlaceProps {
   stream?: MediaStream | null;
   muted?: boolean;
   label?: string;
+  /** Controlled video state — when provided, internal toggle state is ignored. */
+  videoEnabled?: boolean;
+  /** Controlled audio state — when provided, internal toggle state is ignored. */
+  audioEnabled?: boolean;
+  /** Render the built-in hover toggle buttons (local only). Default true. */
+  showControls?: boolean;
+  className?: string;
 }
 
 const CameraPlace: React.FC<CameraPlaceProps> = ({
@@ -14,10 +21,17 @@ const CameraPlace: React.FC<CameraPlaceProps> = ({
   stream,
   muted = false,
   label,
+  videoEnabled,
+  audioEnabled,
+  showControls = true,
+  className,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isVideoEnabled, setIsVideoEnabled] = useState(true);
-  const [isAudioEnabled, setIsAudioEnabled] = useState(true);
+  const [internalVideo, setInternalVideo] = useState(true);
+  const [internalAudio, setInternalAudio] = useState(true);
+
+  const isVideoEnabled = videoEnabled ?? internalVideo;
+  const isAudioEnabled = audioEnabled ?? internalAudio;
 
   useEffect(() => {
     if (videoRef.current && stream) {
@@ -29,7 +43,7 @@ const CameraPlace: React.FC<CameraPlaceProps> = ({
     const videoTrack = stream?.getVideoTracks()[0];
     if (videoTrack) {
       videoTrack.enabled = !videoTrack.enabled;
-      setIsVideoEnabled(videoTrack.enabled);
+      setInternalVideo(videoTrack.enabled);
     }
   };
 
@@ -37,7 +51,7 @@ const CameraPlace: React.FC<CameraPlaceProps> = ({
     const audioTrack = stream?.getAudioTracks()[0];
     if (audioTrack) {
       audioTrack.enabled = !audioTrack.enabled;
-      setIsAudioEnabled(audioTrack.enabled);
+      setInternalAudio(audioTrack.enabled);
     }
   };
 
@@ -46,8 +60,9 @@ const CameraPlace: React.FC<CameraPlaceProps> = ({
   return (
     <div
       className={cn(
-        'group relative aspect-video w-full overflow-hidden rounded-2xl border bg-surface shadow-sm transition-all duration-300 animate-in fade-in zoom-in-95',
-        isLive ? 'border-primary/40 shadow-md' : 'border-border'
+        'group relative aspect-video w-full overflow-hidden rounded-2xl border bg-card transition-all duration-300 animate-in fade-in zoom-in-95',
+        isLive ? 'border-accent-soft-border' : 'border-border',
+        className
       )}
     >
       <video
@@ -62,24 +77,24 @@ const CameraPlace: React.FC<CameraPlaceProps> = ({
       />
 
       {(!isVideoEnabled || !stream) && (
-        <div className="absolute inset-0 flex items-center justify-center bg-muted/40">
-          <div className="flex size-16 items-center justify-center rounded-full bg-muted text-muted-foreground">
-            <VideoOff size={28} />
+        <div className="absolute inset-0 flex items-center justify-center striped-placeholder">
+          <div className="flex size-16 items-center justify-center rounded-full bg-control text-muted-foreground">
+            <VideoOff size={26} />
           </div>
         </div>
       )}
 
-      <div className="absolute bottom-2 left-2 flex items-center gap-1.5 rounded-full bg-background/70 px-2.5 py-1 text-xs font-medium text-foreground backdrop-blur">
+      <div className="absolute bottom-2 left-2 flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 text-xs font-medium text-foreground backdrop-blur">
         <span
           className={cn(
             'size-1.5 rounded-full',
-            isLive ? 'bg-primary animate-pulse' : 'bg-muted-foreground/50'
+            isLive ? 'bg-online' : 'bg-muted-foreground/50'
           )}
         />
         {label ?? (isLocalCamera ? 'You' : 'Remote user')}
       </div>
 
-      {isLocalCamera && (
+      {showControls && isLocalCamera && (
         <div className="absolute bottom-2 right-2 flex items-center gap-2 opacity-80 transition-opacity duration-300 group-hover:opacity-100">
           <button
             type="button"
@@ -88,8 +103,8 @@ const CameraPlace: React.FC<CameraPlaceProps> = ({
             className={cn(
               'flex size-9 items-center justify-center rounded-full backdrop-blur transition-all duration-200 hover:scale-110 active:scale-95',
               isVideoEnabled
-                ? 'bg-background/70 text-foreground hover:bg-background'
-                : 'bg-destructive/90 text-destructive-foreground'
+                ? 'bg-black/60 text-foreground hover:bg-black/80'
+                : 'bg-destructive text-destructive-foreground'
             )}
           >
             {isVideoEnabled ? <Video size={18} /> : <VideoOff size={18} />}
@@ -101,8 +116,8 @@ const CameraPlace: React.FC<CameraPlaceProps> = ({
             className={cn(
               'flex size-9 items-center justify-center rounded-full backdrop-blur transition-all duration-200 hover:scale-110 active:scale-95',
               isAudioEnabled
-                ? 'bg-background/70 text-foreground hover:bg-background'
-                : 'bg-destructive/90 text-destructive-foreground'
+                ? 'bg-black/60 text-foreground hover:bg-black/80'
+                : 'bg-destructive text-destructive-foreground'
             )}
           >
             {isAudioEnabled ? <Mic size={18} /> : <MicOff size={18} />}

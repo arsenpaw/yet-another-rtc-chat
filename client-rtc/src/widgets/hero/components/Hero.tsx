@@ -1,72 +1,108 @@
-import { Badge } from "@/shared/components/ui/badge";
-import { Card, CardContent } from "@/shared/components/ui/card";
-import ConferencePhoto from "@/shared/assets/conference.png"
-import { Button } from "@/shared/components";
-import { Video } from "lucide-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
+import { Mic, Video } from "lucide-react";
+import { Avatar, AvatarStack, Button, MonoLabel, PresenceDot } from "@/shared/ui";
 
 export const Hero = () => {
     const { isAuthenticated, loginWithRedirect } = useAuth0();
     const navigate = useNavigate();
 
     const handleGetStarted = () => {
-        if (isAuthenticated) {
-            navigate("/rooms");
-        } else {
-            loginWithRedirect({
-                appState: { returnTo: "/rooms" }
-            });
-        }
+        if (isAuthenticated) navigate("/rooms");
+        else loginWithRedirect({ appState: { returnTo: "/rooms" } });
     };
+
     return (
-        <div className="flex flex-col md:flex-row items-center gap-10 md:gap-20 px-4">
-            <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-6 duration-700">
-                <Badge className="font-mono text-primary gap-2 bg-surface-accent">
-                    <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-                    </span>
-                    Yet Another RTC Chat
-                </Badge>
-                <h1 className="text-5xl font-display font-semibold flex flex-col items-start gap-1">
-                    <span>Simple, secure</span>
-                    <span className="relative inline-block text-primary pb-2">
-                        <span className="relative z-10">video calls.</span>
-                        <svg
-                            className="absolute left-[-1%] bottom-0.5 w-[102%] h-5.5 text-primary/30 z-0"
-                            viewBox="0 0 100 10"
-                            preserveAspectRatio="none"
-                        >
-                            <path
-                                d="M 0,2 Q 50,10 100,2"
-                                stroke="currentColor"
-                                strokeWidth="7"
-                                fill="none"
-                                strokeLinecap="round"
-                            />
-                        </svg>
-                    </span>
+        <section className="grid items-center gap-12 px-6 pt-16 pb-10 md:grid-cols-[1.05fr_0.95fr] md:px-11 md:pt-[72px]">
+            {/* Left — copy + CTAs */}
+            <div className="animate-in fade-in slide-in-from-bottom-6 duration-700">
+                <MonoLabel className="tracking-[2px] text-eyebrow">Community Rooms</MonoLabel>
+                <h1 className="mt-5 max-w-[640px] text-[40px] font-extrabold leading-[1.04] tracking-[-1.5px] md:text-[60px] md:leading-[1.02] md:tracking-[-2px]">
+                    Rooms for the conversations that matter.
                 </h1>
-                <p className="mt-2 text-lg text-muted-foreground">
-                    Start a private room and talk face to face in seconds.
-                    <br className="hidden md:block" />
-                    No downloads, no clutter — just share a link and connect.
+                <p className="mt-5 max-w-[480px] text-base text-secondary-text md:text-lg md:leading-[1.55]">
+                    Start a private room, drop into a call, and talk face to face in
+                    seconds. The calm, focused home for your conversations — built for
+                    talking, not scrolling.
                 </p>
-                <Button
-                    variant="default"
-                    size="lg"
-                    className="font-mono transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-lg"
-                    onClick={handleGetStarted}
-                >
-                    <Video size={24} />Get Started
-                </Button>
+                <div className="mt-9 flex flex-wrap gap-3.5">
+                    <Button size="lg" onClick={handleGetStarted}>
+                        <Video size={18} /> Create a room
+                    </Button>
+                    <Button size="lg" variant="ghost" onClick={handleGetStarted}>
+                        Browse rooms
+                    </Button>
+                </div>
+                <div className="mt-10 flex items-center gap-3.5">
+                    <AvatarStack
+                        size={34}
+                        max={4}
+                        ringBorderClass="border-background"
+                        items={[
+                            { label: "Jamie Soto" },
+                            { label: "Mara Kveld" },
+                            { label: "Alex Lund" },
+                            { label: "Rhea West" },
+                        ]}
+                    />
+                    <span className="text-sm text-secondary-text">
+                        <b className="text-foreground">2,481</b> people online today
+                    </span>
+                </div>
             </div>
-            <Card className="bg-surface-accent py-5 shadow-xl animate-float animate-in fade-in slide-in-from-bottom-8 duration-1000">
-                <CardContent>
-                    <img src={ConferencePhoto} alt="Conference Call" className="w-full h-full object-cover rounded-lg" loading="lazy" />
-                </CardContent>
-            </Card>
-        </div>
+
+            {/* Right — product preview mock */}
+            <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-2xl animate-in fade-in slide-in-from-bottom-8 duration-1000">
+                <div className="flex items-center justify-between border-b border-border-subtle px-[18px] py-3.5">
+                    <div className="flex items-center gap-2.5">
+                        <span className="font-mono text-faint">#</span>
+                        <span className="text-sm font-semibold">design-critique</span>
+                        <PresenceDot size={7} className="ml-1" />
+                    </div>
+                    <div className="flex gap-2 text-secondary-text">
+                        <span className="flex size-[30px] items-center justify-center rounded-lg bg-white/5">
+                            <Mic size={15} />
+                        </span>
+                        <span className="flex size-[30px] items-center justify-center rounded-lg bg-white/5">
+                            <Video size={15} />
+                        </span>
+                    </div>
+                </div>
+                <div className="flex flex-col gap-4 p-[18px]">
+                    <PreviewMessage name="Jamie Soto" time="11:02" body="pushed the new spacing tokens — way calmer now" />
+                    <PreviewMessage name="Mara Kveld" time="11:03" body="jumping into voice to walk through it 👇" />
+                    <div className="flex items-center justify-between rounded-xl border border-accent-soft-border bg-accent-soft px-3.5 py-3">
+                        <div className="flex items-center gap-2">
+                            <PresenceDot size={8} />
+                            <span className="text-xs font-semibold text-accent-text">3 in voice</span>
+                            <AvatarStack
+                                size={24}
+                                className="ml-1.5"
+                                ringBorderClass="border-card"
+                                items={[
+                                    { label: "Jamie Soto" },
+                                    { label: "Mara Kveld" },
+                                    { label: "Alex Lund" },
+                                ]}
+                            />
+                        </div>
+                        <Button size="sm" className="h-[30px] px-3.5 text-xs">Join</Button>
+                    </div>
+                </div>
+            </div>
+        </section>
     );
 };
+
+const PreviewMessage = ({ name, time, body }: { name: string; time: string; body: string }) => (
+    <div className="flex gap-2.5">
+        <Avatar label={name} size={32} />
+        <div>
+            <div className="text-[13px]">
+                <b>{name}</b>
+                <span className="ml-1.5 font-mono text-[11px] text-faint">{time}</span>
+            </div>
+            <div className="mt-1 text-[13px] text-body">{body}</div>
+        </div>
+    </div>
+);
