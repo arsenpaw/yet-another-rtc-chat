@@ -39,7 +39,14 @@ public class RoomsHub : AuthenticatedHub<IRoomsHubClient>
         var existingParticipant = room.Participants.FirstOrDefault(p => p.UserId == userId);
         if (existingParticipant is not null)
         {
-            existingParticipant.Reconnect();
+            await Clients.Caller.AlreadyInRoom();
+
+            _logger.Information(
+                "User {UserId} attempted to join room {RoomId} they are already in",
+                userId,
+                roomId);
+
+            return;
         }
 
         var participant = room.AddParticipant(userId, Context.ConnectionId);

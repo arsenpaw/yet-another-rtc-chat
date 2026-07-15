@@ -18,84 +18,65 @@ public class SignalingHub : AuthenticatedHub<ISignalingHubClient>
         _logger = Log.ForContext<SignalingHub>();
     }
 
-    public async Task SendOffer(string toConnectionId, string sdp)
+    public async Task SendOffer(string toUserId, string sdp)
     {
-        var room = await _roomRepository.GetByParticipantConnectionIdAsync(Context.ConnectionId);
-
-        if (room == null)
+        var fromUserId = await ResolveTargetAsync(toUserId);
+        if (fromUserId == null)
         {
-            await Clients.Caller.Error("You are not in a room.");
             return;
         }
 
-        var toParticipant = room.Participants.FirstOrDefault(p => p.ConnectionId == toConnectionId);
-
-        if (toParticipant == null || !toParticipant.IsConnected)
-        {
-            await Clients.Caller.Error("Target participant not found or not connected.");
-            return;
-        }
-
-        await Clients.Client(toConnectionId).ReceiveOffer(Context.ConnectionId, sdp);
-
-        _logger.Debug(
-            "Offer sent from {FromConnectionId} to {ToConnectionId} in room {RoomId}",
-            Context.ConnectionId,
-            toConnectionId,
-            room.Id.Value);
+        await Clients.User(toUserId).ReceiveOffer(fromUserId, sdp);
+        _logger.Debug("Offer sent from {FromUserId} to {ToUserId}", fromUserId, toUserId);
     }
 
-    public async Task SendAnswer(string toConnectionId, string sdp)
+    public async Task SendAnswer(string toUserId, string sdp)
     {
-        var room = await _roomRepository.GetByParticipantConnectionIdAsync(Context.ConnectionId);
-
-        if (room == null)
+        var fromUserId = await ResolveTargetAsync(toUserId);
+        if (fromUserId == null)
         {
-            await Clients.Caller.Error("You are not in a room.");
             return;
         }
 
-        var toParticipant = room.Participants.FirstOrDefault(p => p.ConnectionId == toConnectionId);
-
-        if (toParticipant == null || !toParticipant.IsConnected)
-        {
-            await Clients.Caller.Error("Target participant not found or not connected.");
-            return;
-        }
-
-        await Clients.Client(toConnectionId).ReceiveAnswer(Context.ConnectionId, sdp);
-
-        _logger.Debug(
-            "Answer sent from {FromConnectionId} to {ToConnectionId} in room {RoomId}",
-            Context.ConnectionId,
-            toConnectionId,
-            room.Id.Value);
+        await Clients.User(toUserId).ReceiveAnswer(fromUserId, sdp);
+        _logger.Debug("Answer sent from {FromUserId} to {ToUserId}", fromUserId, toUserId);
     }
 
-    public async Task SendIceCandidate(string toConnectionId, string candidate)
+    public async Task SendIceCandidate(string toUserId, string candidate)
     {
-        var room = await _roomRepository.GetByParticipantConnectionIdAsync(Context.ConnectionId);
+        var fromUserId = await ResolveTargetAsync(toUserId);
+        if (fromUserId == null)
+        {
+            return;
+        }
+
+        await Clients.User(toUserId).ReceiveIceCandidate(fromUserId, candidate);
+        _logger.Debug("ICE candidate sent from {FromUserId} to {ToUserId}", fromUserId, toUserId);
+    }
+
+    /// <summary>
+    /// Validates that the caller and the target user share an active room.
+    /// Returns the caller's user id when routing is allowed, otherwise null (and notifies the caller).
+    /// </summary>
+    private async Task<string?> ResolveTargetAsync(string toUserId)
+    {
+        var fromUserId = GetUserSubject();
+        var room = await _roomRepository.GetByParticipantUserIdAsync(fromUserId);
 
         if (room == null)
         {
             await Clients.Caller.Error("You are not in a room.");
-            return;
+            return null;
         }
 
-        var toParticipant = room.Participants.FirstOrDefault(p => p.ConnectionId == toConnectionId);
+        var toParticipant = room.Participants.FirstOrDefault(p => p.UserId == toUserId);
 
         if (toParticipant == null || !toParticipant.IsConnected)
         {
             await Clients.Caller.Error("Target participant not found or not connected.");
-            return;
+            return null;
         }
 
-        await Clients.Client(toConnectionId).ReceiveIceCandidate(Context.ConnectionId, candidate);
-
-        _logger.Debug(
-            "ICE candidate sent from {FromConnectionId} to {ToConnectionId} in room {RoomId}",
-            Context.ConnectionId,
-            toConnectionId,
-            room.Id.Value);
+        return fromUserId;
     }
 }
